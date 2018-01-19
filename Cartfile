@@ -1,0 +1,6 @@
+github "Alamofire/Alamofire" ~> 4.5
+github "ashleymills/Reachability.swift"
+github "apple/swift-protobuf" ~> 1.0.2
+
+# Use a local project
+#git "file:////webdocs/SdkNavegg" "master"

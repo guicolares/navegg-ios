@@ -7,9 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		370A2B502010FCF20097033E /* OnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A2B4F2010FCF20097033E /* OnBoarding.swift */; };
+		373099CD20079280009655B8 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CC20079280009655B8 /* WebService.swift */; };
+		373099D32007928C009655B8 /* MobileInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CE2007928B009655B8 /* MobileInformation.swift */; };
+		373099D42007928C009655B8 /* PageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CF2007928B009655B8 /* PageViewer.swift */; };
+		373099D52007928C009655B8 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D02007928B009655B8 /* Tracker.swift */; };
+		373099D62007928C009655B8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D12007928B009655B8 /* User.swift */; };
 		37C10DA920078DA400331A97 /* SdkNaveggIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */; };
 		37C10DAE20078DA400331A97 /* SdkNaveggIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DAD20078DA400331A97 /* SdkNaveggIOSTests.swift */; };
 		37C10DB020078DA400331A97 /* SdkNaveggIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C10DA220078DA400331A97 /* SdkNaveggIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBA20078E1600331A97 /* NaveggApi.swift */; };
+		37C10DBD20078E5C00331A97 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBC20078E5C00331A97 /* Util.swift */; };
+		37C8F8D02007D69C00E8C154 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C8F8CE2007D69C00E8C154 /* Alamofire.framework */; };
+		37C8F8D12007D69C00E8C154 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C8F8CF2007D69C00E8C154 /* Reachability.framework */; };
+		37C8F8E72007DE9100E8C154 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C8F8E62007DE9100E8C154 /* SwiftProtobuf.framework */; };
+		37C8F8E92007DFA700E8C154 /* package.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8F8E82007DFA700E8C154 /* package.pb.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +35,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		370A2B4F2010FCF20097033E /* OnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoarding.swift; sourceTree = "<group>"; };
+		373099CC20079280009655B8 /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
+		373099CE2007928B009655B8 /* MobileInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileInformation.swift; sourceTree = "<group>"; };
+		373099CF2007928B009655B8 /* PageViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewer.swift; sourceTree = "<group>"; };
+		373099D02007928B009655B8 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
+		373099D12007928B009655B8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SdkNaveggIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C10DA220078DA400331A97 /* SdkNaveggIOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SdkNaveggIOS.h; sourceTree = "<group>"; };
 		37C10DA320078DA400331A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37C10DA820078DA400331A97 /* SdkNaveggIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SdkNaveggIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C10DAD20078DA400331A97 /* SdkNaveggIOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SdkNaveggIOSTests.swift; sourceTree = "<group>"; };
 		37C10DAF20078DA400331A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		37C10DBA20078E1600331A97 /* NaveggApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaveggApi.swift; sourceTree = "<group>"; };
+		37C10DBC20078E5C00331A97 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		37C8F8CE2007D69C00E8C154 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		37C8F8CF2007D69C00E8C154 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
+		37C8F8E62007DE9100E8C154 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
+		37C8F8E82007DFA700E8C154 /* package.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = package.pb.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +60,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37C8F8D02007D69C00E8C154 /* Alamofire.framework in Frameworks */,
+				37C8F8D12007D69C00E8C154 /* Reachability.framework in Frameworks */,
+				37C8F8E72007DE9100E8C154 /* SwiftProtobuf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,12 +77,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		373099BB200791BE009655B8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				37C8F8E62007DE9100E8C154 /* SwiftProtobuf.framework */,
+				37C8F8CE2007D69C00E8C154 /* Alamofire.framework */,
+				37C8F8CF2007D69C00E8C154 /* Reachability.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		373099C0200791EF009655B8 /* Bean */ = {
+			isa = PBXGroup;
+			children = (
+				373099CE2007928B009655B8 /* MobileInformation.swift */,
+				373099CF2007928B009655B8 /* PageViewer.swift */,
+				37C8F8E82007DFA700E8C154 /* package.pb.swift */,
+				373099D02007928B009655B8 /* Tracker.swift */,
+				373099D12007928B009655B8 /* User.swift */,
+				370A2B4F2010FCF20097033E /* OnBoarding.swift */,
+			);
+			path = Bean;
+			sourceTree = "<group>";
+		};
+		373099C1200791F4009655B8 /* WebService */ = {
+			isa = PBXGroup;
+			children = (
+				373099CC20079280009655B8 /* WebService.swift */,
+			);
+			path = WebService;
+			sourceTree = "<group>";
+		};
 		37C10D9520078DA400331A97 = {
 			isa = PBXGroup;
 			children = (
 				37C10DA120078DA400331A97 /* SdkNaveggIOS */,
 				37C10DAC20078DA400331A97 /* SdkNaveggIOSTests */,
 				37C10DA020078DA400331A97 /* Products */,
+				373099BB200791BE009655B8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +130,9 @@
 		37C10DA120078DA400331A97 /* SdkNaveggIOS */ = {
 			isa = PBXGroup;
 			children = (
+				373099C1200791F4009655B8 /* WebService */,
+				373099C0200791EF009655B8 /* Bean */,
+				37C10DB920078E0600331A97 /* Main */,
 				37C10DA220078DA400331A97 /* SdkNaveggIOS.h */,
 				37C10DA320078DA400331A97 /* Info.plist */,
 			);
@@ -84,6 +146,15 @@
 				37C10DAF20078DA400331A97 /* Info.plist */,
 			);
 			path = SdkNaveggIOSTests;
+			sourceTree = "<group>";
+		};
+		37C10DB920078E0600331A97 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				37C10DBA20078E1600331A97 /* NaveggApi.swift */,
+				37C10DBC20078E5C00331A97 /* Util.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +219,7 @@
 				TargetAttributes = {
 					37C10D9E20078DA400331A97 = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
 					37C10DA720078DA400331A97 = {
@@ -196,6 +268,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373099D52007928C009655B8 /* Tracker.swift in Sources */,
+				373099D32007928C009655B8 /* MobileInformation.swift in Sources */,
+				373099CD20079280009655B8 /* WebService.swift in Sources */,
+				37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */,
+				370A2B502010FCF20097033E /* OnBoarding.swift in Sources */,
+				37C10DBD20078E5C00331A97 /* Util.swift in Sources */,
+				373099D42007928C009655B8 /* PageViewer.swift in Sources */,
+				373099D62007928C009655B8 /* User.swift in Sources */,
+				37C8F8E92007DFA700E8C154 /* package.pb.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +348,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -321,8 +402,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
@@ -334,6 +416,7 @@
 		37C10DB420078DA400331A97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -341,12 +424,18 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = SdkNaveggIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.navegg.SdkNaveggIOS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -355,6 +444,7 @@
 		37C10DB520078DA400331A97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -362,8 +452,13 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = SdkNaveggIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.navegg.SdkNaveggIOS;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -376,6 +471,7 @@
 		37C10DB720078DA400331A97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AH5825TBD7;
 				INFOPLIST_FILE = SdkNaveggIOSTests/Info.plist;
@@ -390,6 +486,7 @@
 		37C10DB820078DA400331A97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AH5825TBD7;
 				INFOPLIST_FILE = SdkNaveggIOSTests/Info.plist;
@@ -411,7 +508,7 @@
 				37C10DB220078DA400331A97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		37C10DB320078DA400331A97 /* Build configuration list for PBXNativeTarget "SdkNaveggIOS" */ = {
 			isa = XCConfigurationList;
@@ -420,7 +517,7 @@
 				37C10DB520078DA400331A97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		37C10DB620078DA400331A97 /* Build configuration list for PBXNativeTarget "SdkNaveggIOSTests" */ = {
 			isa = XCConfigurationList;
@@ -429,7 +526,7 @@
 				37C10DB820078DA400331A97 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
