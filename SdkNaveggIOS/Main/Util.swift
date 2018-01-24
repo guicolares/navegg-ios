@@ -14,6 +14,7 @@ import Alamofire
 
 class Util {
     
+    
     func getIpMobile() -> String{
         var address : String!
         
@@ -116,36 +117,33 @@ class Util {
         
     }
     
-    public func getIOSVersionOS() -> String{
+    public func getIOSVersionOS() -> Int32{
         
-        return UIDevice.current.systemVersion
+//        let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
+//        let indexOf1 = segments[segments.index(segments.startIndex,offsetBy: segments.distance(from: segments.startIndex  , to: cut1) )...]
+//
+//        let indexOf2 = indexOf1[...indexOf1.index(indexOf1.endIndex,offsetBy: -4)]
+//
+//        let seg = indexOf2.split(separator: ":", omittingEmptySubsequences: false)
         
-    }
-    
-    public func getTypeConnection()->String{
-        //declare this property where it won't go out of scope relative to your listener
-        let reachability = Reachability()!
-        var type : String = ""
-        reachability.whenReachable = { reachability in
-            if reachability.connection == .wifi {
-                print("Reachable via WiFi")
-                type = "Wi-Fi"
-            } else {
-                print("Reachable via Cellular")
-                type = "4G"
-            }
-        }
-        reachability.whenUnreachable = { _ in
-            print("Not reachable")
-        }
+        let version = UIDevice.current.systemVersion
+        var index8:Character=" "
+        var v:String = ""
+        let index1 = version.index(before:version.index(version.startIndex, offsetBy: version.distance(from: version.startIndex  , to: version.index(of: ".")!)))
+        let index2 = version[...index1]
+        let index3 = version.index(after:version.index(version.startIndex, offsetBy: version.distance(from: version.startIndex  , to: version.index(of: ".")!)))
+        let index4 = version[index3...]
         
-        do {
-            try reachability.startNotifier()
-        } catch {
-            print("Unable to start notifier")
+        v = "\(index2)\(index4)"
+        if(version.count > 4){
+            let index5 = index4.index(before:index4.index(index4.startIndex, offsetBy: index4.distance(from: index4.startIndex  , to: index4.index(of: ".")!)))
+            let index6 = version[index5]
+            let index7 = index4.index(after:index4.index(index4.startIndex, offsetBy: index4.distance(from: index4.startIndex  , to: index4.index(of: ".")!)))
+            index8 = version[index7]
+            v = "\(index2)\(index6)\(index8)"
         }
-        print("CONEXão Existente", type)
-        return type
+        return Int32(v)!
+        
     }
     
     public func getVersionApp() -> String{
@@ -202,7 +200,7 @@ class Util {
         trackProto.userID = "12d450cac700b4f1f7491806"
         trackProto.nameApp = getNameApp()
         trackProto.deviceIp = getIpMobile()
-        trackProto.typeConnection = getTypeConnection()
+        trackProto.typeConnection = ReachabilityManager.shared.getTypeConnection()
         trackProto.pageViews = pageView
         
         return trackProto
@@ -224,7 +222,6 @@ class Util {
         }
         return listPageView
     }
-
     
     
 }

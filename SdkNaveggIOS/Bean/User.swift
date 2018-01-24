@@ -25,6 +25,7 @@ struct User {
     "", "custom", "industry", "everybuyer" //empty one was prolook
     ];
     var onBoarding:OnBoarding?
+    var ws = WebService()
 
     init(accountId : Int? = 0, context:AnyObject){
         
@@ -33,7 +34,7 @@ struct User {
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!
         self.userId = defaults.string(forKey: "NVGSDK_USERID")
         self.loadResourcesFromSharedObject()
-       
+        
         
     }
     
@@ -83,10 +84,10 @@ struct User {
     /* MobileInfo */
     func getDataMobileInfo() throws ->MobileInfo{
         var mobInfo = MobileInfo()
-        mobInfo.deviceID = util.getDeviceId()
+        mobInfo.deviceID = util.getDeviceId() // Device ID e IMEI são os mesmos
         mobInfo.platform = "IOS"
-        mobInfo.longitude = ""
-        mobInfo.latitude = ""
+        mobInfo.longitude = LocationPosition.sharedLocation.getPositionLongitude()
+        mobInfo.latitude = LocationPosition.sharedLocation.getPositionLatitude()
         mobInfo.androidName = util.getIOSName()
         mobInfo.androidBrand = ""
         mobInfo.androidModel = util.getIOSModel()
@@ -94,11 +95,11 @@ struct User {
         mobInfo.manufacturer = ""
         mobInfo.versionLib = util.getVersionApp()
         mobInfo.versionCode = Int32(Int(util.getVersionCodeLib())!)
-        mobInfo.versionOs = 0
-        mobInfo.androidFingerPrint = ""
+        mobInfo.versionOs = util.getIOSVersionOS()
+        mobInfo.androidFingerPrint = util.getDeviceId()
         mobInfo.userAgent = util.getUserAgent()
         mobInfo.linkPlayStore = util.getLinkAppStore(appId: (self.defaults.integer(forKey: "NVGSDK_IDAPPSTORE")))
-        mobInfo.imei = ""
+        mobInfo.imei = util.getDeviceId() // IOS não permite pegar o imei, e recomenda usar o Device ID como IMEI
         mobInfo.softwareVersion = ""
         mobInfo.languageApp = util.getLanguageApp()
 //        mobInfo.userID = getUserID()
@@ -143,16 +144,20 @@ struct User {
         listPageView = listPageView.sorted(by: { $0.dateTime < $1.dateTime })
 
         let JsonDataSerialied = try! JSONSerialization.jsonObject(with: try! JSONEncoder().encode(listPageView), options: .allowFragments)
-        defaults.set( NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "listAppPageView")
+        defaults.set(NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "listAppPageView")
         defaults.synchronize()
         
     }
     
     
-    func getPageView()->[PageViewer]{
-        let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
-        let jsonDecoderData:[PageViewer] = try! JSONDecoder().decode([PageViewer].self, from: jsonSerData!)
-        return jsonDecoderData
+    
+    mutating func getPageView()->[PageViewer]{
+
+        if(defaults.object(forKey: "listAppPageView") != nil){
+            let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
+            listPageView = try! JSONDecoder().decode([PageViewer].self, from: jsonSerData!)
+        }
+        return listPageView
     }
     
     mutating func clearListPageView(){
@@ -170,9 +175,11 @@ struct User {
     }
     
     mutating func getCustomList() -> [Int]{
-        let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "customList") as! Data)!)
-        let jsonDecoderData:[Int] = try! JSONDecoder().decode([Int].self, from: jsonSerData!)
-        return jsonDecoderData
+        if(defaults.object(forKey: "customList") != nil){
+            let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "customList") as! Data)!)
+            listCustom = try! JSONDecoder().decode([Int].self, from: jsonSerData!)
+        }
+        return listCustom
     }
     
     mutating func removeCustom(id_custom:Int){
@@ -199,8 +206,6 @@ struct User {
             if(segment != nil){
                 idSegments = jsonSegments![segment!].value as! String
             }
-        }else{
-            print("USER getSegments ESTA VAZIO ")
         }
         return idSegments
         
@@ -236,5 +241,24 @@ struct User {
         return self.onBoarding!
     }
     
+    
+
+    
+    /* Send Data when user lay app in background or close app and after open the app */
+    mutating func sendDataSaveInDefault(){
+        ws = WebService()
+        if(util.isConnectedInternet()){
+            if(getPageView().count > 0 ){
+                ws.sendDataTrack(user: self, pageView: getPageView())
+            }
+            if(getCustomList().count > 0){
+                ws.sendCustomList(user: self, listCustom: getCustomList())
+            }
+            if(!getOnBoarding().hasToSendOnBoarding()){
+                ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
+            }
+        }
+        
+    }
     
 }

@@ -34,7 +34,7 @@ struct OnBoarding {
     }
     
     public func hasToSendOnBoarding()->Bool{
-        return self.defaults.bool(forKey: "toSendOnBoarding")
+        return self.defaults.bool(forKey: "toSendOnBoarding") ? false : true
     }
     
     public func getInfo(key:String)->String{

@@ -7,6 +7,7 @@
 //
 import Foundation
 import Alamofire
+import Reachability
 
 
 public class NaveggApi:NSObject{
@@ -14,27 +15,35 @@ public class NaveggApi:NSObject{
     private let util = Util()
     private let ws = WebService()
     private var user : User
+    private let reachability = Reachability()!
+    private var appDelegate: AnyObject
+    let NetworkReachabilityChanged = NSNotification.Name("NetworkReachabilityChanged")
+  
+    
     
     required public init(cod:Int, context: AnyObject, idAppStore:Int?=0){
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(cod)")!
         self.defaults.set(cod, forKey: "NVGSDK_CODCONTA")
         self.defaults.set(idAppStore, forKey: "NVGSDK_IDAPPSTORE")
         self.user = User(accountId: cod, context: context)
-    
+        self.appDelegate = context
+        LocationPosition.sharedLocation.determineMyCurrentLocation()
+        
         if (self.user.getUserID() == "0") {
             self.ws.createUser(user: user, acc:cod)
         }
-        
         super.init()
         registerReceiverAndAccountSdk(cod: cod)
         
     }
     
-    
+
     func registerReceiverAndAccountSdk(cod:Int){
         
-        if(!(defaults.bool(forKey: "NVGSDK_RECEIVER"))){
-            print("Receiver Criado")
+        if(!ReachabilityManager.shared.isCreateNotificationCenter()){
+            ReachabilityManager.shared.createNotificationCenter(create: true)
+            ReachabilityManager.shared.startMonitoring(user: self.user)
+            ReachabilityManager.shared.startApplicationDidEnterBackground(user: self.user)
         }
         
 //        var accounts = defaults.array(forKey: "accounts") as? [Int] ?? [Int]()
@@ -77,31 +86,5 @@ public class NaveggApi:NSObject{
         return self.user.getOnBoarding().getInfo(key: key)
     }
     
-//    func NaveggApiPrint (cod:Int, context : AnyObject){
-//
-//
-//        //        Track(userId: <#String#>, acc: <#String#>, nameApp: <#String#>, deviceIP: <#String#>, typeConnection: <#String#>)
-//        print(self.util.getIpMobile())
-//        print(self.util.getDeviceId())
-//        //        print("https://itunes.apple.com/app/id"+util.getDeviceId()+"?mt=8")
-//        print(self.util.getTypeCategory())
-//        print(util.getLinkAppStore(appId: 3203947))
-//        print(util.getTitleView(navigationItem: context))
-//        print(util.getNameApp())
-//
-//        print(util.getIOSModel())
-//        print(util.getIOSName())
-//        print(util.getIOSVersionOS())
-//        print(util.getVersionApp())
-//        print(util.getVersionCodeLib())
-//        print(util.getUserAgent())
-//        print(util.getLanguageApp())
-//
-//
-//        if let codConta = defaults?.integer(forKey: "NVGSDK_CODCONTA") {
-//            print(codConta) // Some String Value
-//        }
-//    }
     
 }
-

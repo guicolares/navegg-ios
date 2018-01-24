@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 
+
 class WebService{
     let headers:[String:String] = ["User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", "content-type":"application/octet-stream"]
     let util = Util()
@@ -16,7 +17,12 @@ class WebService{
         .endLineWithLineFeed,
         .endLineWithCarriageReturn
     ]
-    init (){}
+    let sessionConfig:SessionManager
+    
+    init (){
+        let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
+        sessionConfig = Alamofire.SessionManager(configuration: configuration)
+    }
     
     func ENDPOINTS(url : String) -> String {
         var URL : [String:String] = ["user":"usr","request":"cdn","onboarding":"cd"]
@@ -41,7 +47,7 @@ class WebService{
     public func createUser (user: User, acc:Int) {
         if(util.isConnectedInternet()){
             var usr = user
-            Alamofire.request(self.getEndPoint(endPoint: "user",param: "usr"),
+            sessionConfig.request(self.getEndPoint(endPoint: "user",param: "usr"),
                               parameters: ["acc":acc, "devid": util.getDeviceId()],
                               headers: self.headers).response{ (response) in
                 do {
@@ -52,9 +58,10 @@ class WebService{
                         usr.setToDataMobileInfo(sendMobileinfo: true);
                         self.sendDataMobileInfo(user: usr, mobileInfo: try usr.getDataMobileInfo())
                         self.getSegments(user: usr)
+                        print("create user")
                     }
                 } catch {
-                    print(error.localizedDescription)
+                    
                 }
             }
         }
@@ -71,9 +78,9 @@ class WebService{
 
             let mobInfo = try! mobileInfo.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = mobInfo
-            Alamofire.request(urlRequest).responseString{ (response) in
-                print("Success MobileInfo: \(response.result.isSuccess)")
+            sessionConfig.request(urlRequest).responseString{ (response) in
                 usr.setToDataMobileInfo(sendMobileinfo: true)
+                print("sendDataMobileInfo")
             }
         }else{
            usr.setToDataMobileInfo(sendMobileinfo: false)
@@ -84,16 +91,15 @@ class WebService{
         if (user.getUserID() == "0"){
             return
         }
-        let pageTrack = util.setDataTrack(user: user, pageView: util.setListDataPageTrack(pageView: pageView))
         if (util.isConnectedInternet()){
+            let pageTrack = util.setDataTrack(user: user, pageView: util.setListDataPageTrack(pageView: pageView))
             var usr = user
             var urlRequest = self.getEndPointURLRequest(endPoint: "request",param: "sdkreq")
             let trackInfo = try! pageTrack.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = trackInfo
-            Alamofire.request(urlRequest).responseString{ (response) in
-                print("Success Track: \(response.result.isSuccess)")
+            sessionConfig.request(urlRequest).responseString{ (response) in
                 usr.clearListPageView()
-                  self.getSegments(user: usr)
+                print("sendDataTrack")
             }
         }
         
@@ -103,16 +109,16 @@ class WebService{
         if (user.getUserID() == "0"){
             return
         }
+
         if (util.isConnectedInternet()){
             var usr = user
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             for id_custom in listCustom{
-            Alamofire.request(self.getEndPoint(endPoint: "request",param: "cus"),
-                  parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":"a299033ade4cbe50050d205"],
+            sessionConfig.request(self.getEndPoint(endPoint: "request",param: "cus"),
+                  parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserID()],
                   headers: self.headers).response(queue:queue,completionHandler:{(response) in
                         usr.removeCustom(id_custom: id_custom)
-                        print("Success Custom:")
-    
+                            print("sendCustomList")
                         }
                 )
             }
@@ -133,10 +139,10 @@ class WebService{
                v = 10 Tag Navegg Version
              */
             Alamofire.request(self.getEndPoint(endPoint: "user",param: "usr"),
-                      parameters: ["acc":usr.getAccountId(), "wst": 0,"v":10, "id":"a299033ade4cbe50050d205", "asdk":util.getVersionLib()],
+                      parameters: ["acc":usr.getAccountId(), "wst": 0,"v":10, "id":user.getUserID(), "asdk":util.getVersionLib()],
                       headers: self.headers).responseString{ (response) in
-
-                        usr.saveSegments(segments: response.result.value!)                        
+                        usr.saveSegments(segments: response.result.value!)
+                         print("getSegments")
             }
         }
     }
@@ -145,14 +151,19 @@ class WebService{
         if (user.getUserID() == "0"){
             return
         }
-        var usr = user
+        let usr = user
         if (util.isConnectedInternet()){
-            let parameters = ["acc":usr.getAccountId(), "id":"a299033ade4cbe50050d205", "hasMap":onBoarding.__get_hash_map()] as [String : Any]
+            var parameters = ["prtid":usr.getAccountId(), "id":user.getUserID()] as [String : Any]
+            for (key,value) in onBoarding.__get_hash_map(){
+                parameters.updateValue(value, forKey: key)
+            }
+//
 //            var urlRequest = self.getEndPointURLRequest(endPoint: "onboarding",param: "cd")
 //            let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
 //            urlRequest.httpBody = try! JSONSerialization.data(withJSONObject: jsonData)
-            Alamofire.request(self.getEndPoint(endPoint: "onboarding",param: "cd"),parameters:parameters,headers: self.headers).responseString{ (response) in
-                onBoarding.__set_to_send_onBoarding(status: true)
+            sessionConfig.request(self.getEndPoint(endPoint: "onboarding",param: "cd"),parameters:parameters,headers: self.headers).responseString{ (response) in
+                user.getOnBoarding().__set_to_send_onBoarding(status: true)
+                print("sendOnBoarding")
             }
         }
     }

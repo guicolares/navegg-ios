@@ -13,6 +13,8 @@
 		373099D42007928C009655B8 /* PageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CF2007928B009655B8 /* PageViewer.swift */; };
 		373099D52007928C009655B8 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D02007928B009655B8 /* Tracker.swift */; };
 		373099D62007928C009655B8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D12007928B009655B8 /* User.swift */; };
+		376D24882015FFA4007D3971 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376D24872015FFA4007D3971 /* ReachabilityManager.swift */; };
+		377E2C62201896BF00217E71 /* LocationPostion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377E2C61201896BF00217E71 /* LocationPostion.swift */; };
 		37C10DA920078DA400331A97 /* SdkNaveggIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */; };
 		37C10DAE20078DA400331A97 /* SdkNaveggIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DAD20078DA400331A97 /* SdkNaveggIOSTests.swift */; };
 		37C10DB020078DA400331A97 /* SdkNaveggIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C10DA220078DA400331A97 /* SdkNaveggIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,6 +43,8 @@
 		373099CF2007928B009655B8 /* PageViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewer.swift; sourceTree = "<group>"; };
 		373099D02007928B009655B8 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		373099D12007928B009655B8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		376D24872015FFA4007D3971 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
+		377E2C61201896BF00217E71 /* LocationPostion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPostion.swift; sourceTree = "<group>"; };
 		37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SdkNaveggIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C10DA220078DA400331A97 /* SdkNaveggIOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SdkNaveggIOS.h; sourceTree = "<group>"; };
 		37C10DA320078DA400331A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -96,6 +100,7 @@
 				373099D02007928B009655B8 /* Tracker.swift */,
 				373099D12007928B009655B8 /* User.swift */,
 				370A2B4F2010FCF20097033E /* OnBoarding.swift */,
+				376D24872015FFA4007D3971 /* ReachabilityManager.swift */,
 			);
 			path = Bean;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			children = (
 				37C10DBA20078E1600331A97 /* NaveggApi.swift */,
 				37C10DBC20078E5C00331A97 /* Util.swift */,
+				377E2C61201896BF00217E71 /* LocationPostion.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -268,10 +274,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				377E2C62201896BF00217E71 /* LocationPostion.swift in Sources */,
 				373099D52007928C009655B8 /* Tracker.swift in Sources */,
 				373099D32007928C009655B8 /* MobileInformation.swift in Sources */,
 				373099CD20079280009655B8 /* WebService.swift in Sources */,
 				37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */,
+				376D24882015FFA4007D3971 /* ReachabilityManager.swift in Sources */,
 				370A2B502010FCF20097033E /* OnBoarding.swift in Sources */,
 				37C10DBD20078E5C00331A97 /* Util.swift in Sources */,
 				373099D42007928C009655B8 /* PageViewer.swift in Sources */,
