@@ -14,7 +14,6 @@ import Alamofire
 
 class Util {
     
-    
     func getIpMobile() -> String{
         var address : String!
         
