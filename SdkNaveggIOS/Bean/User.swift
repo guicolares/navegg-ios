@@ -213,7 +213,6 @@ struct User {
     
     mutating func saveSegments(segments:String){
 
-
         let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
         let indexOf1 = segments[segments.index(segments.startIndex,offsetBy: segments.distance(from: segments.startIndex  , to: cut1) )...]
         

@@ -1,0 +1,12 @@
+
+COCOA PODS:
+
+Não commitar a pasta Pod.
+
+Para realizar algum update na versão do arquivo, leia:
+https://www.concrete.com.br/2016/04/01/como-publicar-primeiro-cocoapod/
+
+
+CARTHAGE:
+
+
