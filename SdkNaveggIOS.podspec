@@ -1,7 +1,7 @@
 s.name = "Navegg-IOS"
  
 //versão da sua lib — branch que você criou no git
-s.version = "1.0"
+s.version = "1.0.0"
  
 //resumo da descrição da sua lib
 s.summary = "Library used in the tracker users."
@@ -21,3 +21,5 @@ s.social_media_url = ''
  
 //path das suas classes
 s.source_files = Pod/Classes/**/*.{h,m}
+
+spec.vendored_frameworks = 'Frameworks/Alamofire', 'Frameworks/Reachability', 'Frameworks/SwiftProtobuf'
