@@ -15,14 +15,14 @@
 		373099D62007928C009655B8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D12007928B009655B8 /* User.swift */; };
 		376D24882015FFA4007D3971 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376D24872015FFA4007D3971 /* ReachabilityManager.swift */; };
 		377E2C62201896BF00217E71 /* LocationPostion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377E2C61201896BF00217E71 /* LocationPostion.swift */; };
+		37BB5C61201B5F5F00069A98 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB5C5E201B5F5F00069A98 /* Alamofire.framework */; };
+		37BB5C62201B5F5F00069A98 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB5C5F201B5F5F00069A98 /* Reachability.framework */; };
+		37BB5C63201B5F5F00069A98 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB5C60201B5F5F00069A98 /* SwiftProtobuf.framework */; };
 		37C10DA920078DA400331A97 /* SdkNaveggIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */; };
 		37C10DAE20078DA400331A97 /* SdkNaveggIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DAD20078DA400331A97 /* SdkNaveggIOSTests.swift */; };
 		37C10DB020078DA400331A97 /* SdkNaveggIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C10DA220078DA400331A97 /* SdkNaveggIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBA20078E1600331A97 /* NaveggApi.swift */; };
 		37C10DBD20078E5C00331A97 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBC20078E5C00331A97 /* Util.swift */; };
-		37C8F8D02007D69C00E8C154 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C8F8CE2007D69C00E8C154 /* Alamofire.framework */; };
-		37C8F8D12007D69C00E8C154 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C8F8CF2007D69C00E8C154 /* Reachability.framework */; };
-		37C8F8E72007DE9100E8C154 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C8F8E62007DE9100E8C154 /* SwiftProtobuf.framework */; };
 		37C8F8E92007DFA700E8C154 /* package.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8F8E82007DFA700E8C154 /* package.pb.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +45,9 @@
 		373099D12007928B009655B8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		376D24872015FFA4007D3971 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
 		377E2C61201896BF00217E71 /* LocationPostion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPostion.swift; sourceTree = "<group>"; };
+		37BB5C5E201B5F5F00069A98 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Frameworks/Alamofire.framework; sourceTree = "<group>"; };
+		37BB5C5F201B5F5F00069A98 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Frameworks/Reachability.framework; sourceTree = "<group>"; };
+		37BB5C60201B5F5F00069A98 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Frameworks/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SdkNaveggIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C10DA220078DA400331A97 /* SdkNaveggIOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SdkNaveggIOS.h; sourceTree = "<group>"; };
 		37C10DA320078DA400331A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -53,9 +56,6 @@
 		37C10DAF20078DA400331A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37C10DBA20078E1600331A97 /* NaveggApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaveggApi.swift; sourceTree = "<group>"; };
 		37C10DBC20078E5C00331A97 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		37C8F8CE2007D69C00E8C154 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		37C8F8CF2007D69C00E8C154 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
-		37C8F8E62007DE9100E8C154 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		37C8F8E82007DFA700E8C154 /* package.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = package.pb.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,9 +64,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37C8F8D02007D69C00E8C154 /* Alamofire.framework in Frameworks */,
-				37C8F8D12007D69C00E8C154 /* Reachability.framework in Frameworks */,
-				37C8F8E72007DE9100E8C154 /* SwiftProtobuf.framework in Frameworks */,
+				37BB5C61201B5F5F00069A98 /* Alamofire.framework in Frameworks */,
+				37BB5C62201B5F5F00069A98 /* Reachability.framework in Frameworks */,
+				37BB5C63201B5F5F00069A98 /* SwiftProtobuf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,9 +84,9 @@
 		373099BB200791BE009655B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				37C8F8E62007DE9100E8C154 /* SwiftProtobuf.framework */,
-				37C8F8CE2007D69C00E8C154 /* Alamofire.framework */,
-				37C8F8CF2007D69C00E8C154 /* Reachability.framework */,
+				37BB5C5E201B5F5F00069A98 /* Alamofire.framework */,
+				37BB5C5F201B5F5F00069A98 /* Reachability.framework */,
+				37BB5C60201B5F5F00069A98 /* SwiftProtobuf.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -435,6 +435,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = SdkNaveggIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -463,6 +464,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = SdkNaveggIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
