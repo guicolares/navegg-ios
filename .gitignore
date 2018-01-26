@@ -4,6 +4,7 @@
 
 *.swp
 Pod/
+.DS_Store
 
 ## Build generated
 build/
