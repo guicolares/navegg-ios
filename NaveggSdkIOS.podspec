@@ -19,7 +19,7 @@ s.ios.deployment_target  = '8.0'
  
 s.social_media_url = ''
  
-s.ios.source_files = 'Pod/Classes/**/*.{h,m}'
+s.ios.source_files = 'SdkNaveggIOS', 'SdkNaveggIOS/**/*.{h,m,swift}'
 
 #s.vendored_frameworks = 'Frameworks/Alamofire.framework', 'Frameworks/Reachability.framework', 'Frameworks/SwiftProtobuf.framework'
 
