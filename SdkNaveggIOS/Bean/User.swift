@@ -26,6 +26,7 @@ struct User {
     ];
     var onBoarding:OnBoarding?
     var ws = WebService()
+    var dateLastSync:Date?=nil
 
     init(accountId : Int? = 0, context:AnyObject){
         
@@ -199,7 +200,15 @@ struct User {
     /* Segments */
     mutating func getSegments(segments:String)->String{
         var idSegments:String = ""
-        
+        let currentDate = Date()
+        let stringDate = defaults.string(forKey: "dateLastSync")
+        if(stringDate != nil){
+            self.dateLastSync = util.StringToDate(dateString: stringDate!)
+            if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) == 1){
+                ws.getSegments(user: self)
+            }
+        }
+      
         let jsonSegments = defaults.dictionary(forKey: "jsonSegments")
         if((jsonSegments?.count) != nil){
             let segment = jsonSegments?.index(forKey: segments)
@@ -211,8 +220,10 @@ struct User {
         
     }
     
-    mutating func saveSegments(segments:String){
 
+    
+    mutating func saveSegments(segments:String){
+        let date = Date()
         let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
         let indexOf1 = segments[segments.index(segments.startIndex,offsetBy: segments.distance(from: segments.startIndex  , to: cut1) )...]
         
@@ -225,8 +236,8 @@ struct User {
                 jsonObject.setValue(String(describing: seg[index]), forKey: segment)
             }
         }
-        
         defaults.setValue(jsonObject, forKey: "jsonSegments")
+        defaults.setValue(util.DateToString(date: date), forKey: "dateLastSync")
     }
     
     

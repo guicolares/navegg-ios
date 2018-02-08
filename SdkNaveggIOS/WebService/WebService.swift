@@ -58,7 +58,6 @@ class WebService{
                         usr.setToDataMobileInfo(sendMobileinfo: true);
                         self.sendDataMobileInfo(user: usr, mobileInfo: try usr.getDataMobileInfo())
                         self.getSegments(user: usr)
-                        print("create user")
                     }
                 } catch {
                     
@@ -80,7 +79,6 @@ class WebService{
             urlRequest.httpBody = mobInfo
             sessionConfig.request(urlRequest).responseString{ (response) in
                 usr.setToDataMobileInfo(sendMobileinfo: true)
-                print("sendDataMobileInfo")
             }
         }else{
            usr.setToDataMobileInfo(sendMobileinfo: false)
@@ -99,7 +97,6 @@ class WebService{
             urlRequest.httpBody = trackInfo
             sessionConfig.request(urlRequest).responseString{ (response) in
                 usr.clearListPageView()
-                print("sendDataTrack")
             }
         }
         
@@ -118,7 +115,6 @@ class WebService{
                   parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserID()],
                   headers: self.headers).response(queue:queue,completionHandler:{(response) in
                         usr.removeCustom(id_custom: id_custom)
-                            print("sendCustomList")
                         }
                 )
             }
@@ -142,7 +138,6 @@ class WebService{
                       parameters: ["acc":usr.getAccountId(), "wst": 0,"v":10, "id":user.getUserID(), "asdk":util.getVersionLib()],
                       headers: self.headers).responseString{ (response) in
                         usr.saveSegments(segments: response.result.value!)
-                         print("getSegments")
             }
         }
     }
@@ -163,7 +158,6 @@ class WebService{
 //            urlRequest.httpBody = try! JSONSerialization.data(withJSONObject: jsonData)
             sessionConfig.request(self.getEndPoint(endPoint: "onboarding",param: "cd"),parameters:parameters,headers: self.headers).responseString{ (response) in
                 user.getOnBoarding().__set_to_send_onBoarding(status: true)
-                print("sendOnBoarding")
             }
         }
     }

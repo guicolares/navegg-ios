@@ -223,4 +223,32 @@ class Util {
     }
     
     
+    func StringToDate(dateString : String)-> Date {
+        let dateFormatter = DateFormatter()
+        //2018-02-08 17:40:18
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" //Your date format
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00") //Current time zone
+        return dateFormatter.date(from: dateString)! //according to date format your date string
+    }
+    
+    func DateToString(date:Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" //Your New Date format as per requirement change it own
+        return dateFormatter.string(from: date) //pass Date here
+    }
+    
+    func dayBetweenDates(firstDate:Date, secondDate:Date)->Int{
+        let calendar = NSCalendar.current
+        
+        // Replace the hour (time) of both dates with 00:00
+        let date1 = calendar.startOfDay(for: firstDate)
+        let date2 = calendar.startOfDay(for: secondDate)
+        
+        let components = calendar.dateComponents([.day], from: date1, to: date2)
+        
+        return components.day!
+    }
+    
+    
+    
 }
