@@ -1,0 +1,11 @@
+framework module SdkNaveggIOS {
+  umbrella header "SdkNaveggIOS.h"
+
+  export *
+  module * { export * }
+}
+
+module SdkNaveggIOS.Swift {
+    header "SdkNaveggIOS-Swift.h"
+    requires objc
+}

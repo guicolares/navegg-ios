@@ -217,7 +217,6 @@ struct User {
             }
         }
         return idSegments
-        
     }
     
 
@@ -267,7 +266,6 @@ struct User {
                 ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
             }
         }
-        
     }
     
 }
