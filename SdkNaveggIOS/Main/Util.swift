@@ -14,6 +14,8 @@ import Alamofire
 
 class Util {
     
+    
+    
     func getIpMobile() -> String{
         var address : String!
         
@@ -249,6 +251,7 @@ class Util {
         return components.day!
     }
     
+
     
     
 }

@@ -27,6 +27,9 @@ struct User {
     var onBoarding:OnBoarding?
     var ws = WebService()
     var dateLastSync:Date?=nil
+    var customListPermanent = [Int]()
+    
+    var jsonSegments = [String:Any]()
 
     init(accountId : Int? = 0, context:AnyObject){
         
@@ -74,7 +77,13 @@ struct User {
         }
         self.onBoarding = OnBoarding(defaults: defaults)
         
+        if(defaults.dictionary(forKey: "jsonSegments") != nil){
+            self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")!
+        }
         
+        if(defaults.array(forKey: "customListAux") != nil){
+            self.customListPermanent = defaults.array(forKey: "customListAux") as! [Int]
+        }
     }
     
     mutating func __set_user_id(userID :String){
@@ -170,8 +179,10 @@ struct User {
     mutating func setCustom(id_custom:Int){
         self.listCustom.append(id_custom)
         
+        self.setCustomInPositionSegment(custom: id_custom)
+        
         let JsonDataSerialied = try! JSONSerialization.jsonObject(with: try! JSONEncoder().encode(self.listCustom), options: .allowFragments)
-        defaults.set( NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "customList")
+        defaults.set(NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "customList")
         defaults.synchronize()
     }
     
@@ -202,6 +213,7 @@ struct User {
         var idSegments:String = ""
         let currentDate = Date()
         let stringDate = defaults.string(forKey: "dateLastSync")
+        distintcCustomSegment()
         if(stringDate != nil){
             self.dateLastSync = util.StringToDate(dateString: stringDate!)
             if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) == 1){
@@ -209,18 +221,27 @@ struct User {
             }
         }
       
-        let jsonSegments = defaults.dictionary(forKey: "jsonSegments")
-        if((jsonSegments?.count) != nil){
-            let segment = jsonSegments?.index(forKey: segments)
+//        self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")
+        
+        if((self.jsonSegments.count) > 0){
+            let segment = self.jsonSegments.index(forKey: segments)
             if(segment != nil){
-                idSegments = jsonSegments![segment!].value as! String
+                idSegments = jsonSegments[segment!].value as! String
             }
         }
         return idSegments
     }
     
-
     
+   mutating func setCustomInPositionSegment(custom:Int){
+        if(!self.customListPermanent.contains(custom)){
+                self.customListPermanent.append(custom)
+                defaults.setValue(self.customListPermanent , forKey: "customListAux")
+                defaults.synchronize()
+        }
+    }
+    
+
     mutating func saveSegments(segments:String){
         let date = Date()
         let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
@@ -249,9 +270,6 @@ struct User {
         return self.onBoarding!
     }
     
-    
-
-    
     /* Send Data when user lay app in background or close app and after open the app */
     mutating func sendDataSaveInDefault(){
         ws = WebService()
@@ -266,6 +284,30 @@ struct User {
                 ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
             }
         }
+    }
+    
+    mutating func distintcCustomSegment(){
+        
+        let segment = self.jsonSegments.index(forKey: "custom")
+        var idSegments : String = ""
+        if(segment != nil){
+            idSegments = self.jsonSegments[segment!].value as! String
+        }else{
+            self.jsonSegments["custom"] = [String:Any]();
+        }
+        
+        for value in customListPermanent{
+            if idSegments.range(of:"\(value)") == nil {
+                if(idSegments.count > 0){
+                    idSegments += "-\(value)"
+                }else{
+                    idSegments += "\(value)"
+                }
+            }
+        }
+        
+        self.jsonSegments.updateValue(idSegments, forKey: "custom")
+    
     }
     
 }

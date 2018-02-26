@@ -11,6 +11,8 @@ import Alamofire
 
 
 class WebService{
+    // HASH COnta 666 = "29a359c0409a86dd64d03"
+    
     let headers:[String:String] = ["User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", "content-type":"application/octet-stream"]
     let util = Util()
     let options : Data.Base64EncodingOptions = [
@@ -114,7 +116,7 @@ class WebService{
             sessionConfig.request(self.getEndPoint(endPoint: "request",param: "cus"),
                   parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserID()],
                   headers: self.headers).response(queue:queue,completionHandler:{(response) in
-                        usr.removeCustom(id_custom: id_custom)
+                        //usr.removeCustom(id_custom: id_custom)
                         }
                 )
             }
