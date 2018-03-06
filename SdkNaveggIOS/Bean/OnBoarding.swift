@@ -9,24 +9,33 @@
 import Foundation
 
 
-struct OnBoarding {
+class OnBoarding{
     var defaults : UserDefaults
-    var data: NSMutableDictionary =  NSMutableDictionary()
-    var valueData : [String:Any]
+    var data: NSMutableDictionary
+    var valueData:[String:Any]
     
     
     init(defaults:UserDefaults){
+        self.valueData = Dictionary<String,Any>()
+        self.data =  NSMutableDictionary()
         self.defaults = defaults
-        self.valueData = self.defaults.dictionary(forKey: "onBoarding") ?? [:]
         if((self.valueData.count) != 0){
-            self.data =  NSMutableDictionary()
+            self.valueData = [String:Any]()
         }
     }
     
     
     public func addInfo(key:String, value:String){
-        self.data.setValue(value, forKey: key)
-        self.defaults.set(self.data, forKey: "onBoarding")
+        self.valueData = self.defaults.dictionary(forKey: "onBoarding") ?? [:]
+        self.valueData[key] = value
+        self.defaults.set(self.valueData, forKey: "onBoarding")
+        self.defaults.synchronize()
+        
+//
+//        let JsonDataSerialied = try! JSONEncoder().encode(self.valueData)
+//        defaults.set(NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "onBoarding")
+//        defaults.synchronize()
+//
     }
     
     public func __set_to_send_onBoarding(status:Bool){

@@ -21,6 +21,8 @@ class WebService{
     ]
     let sessionConfig:SessionManager
     
+    let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
+    
     init (){
         let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
         sessionConfig = Alamofire.SessionManager(configuration: configuration)
@@ -150,10 +152,18 @@ class WebService{
         }
         let usr = user
         if (util.isConnectedInternet()){
-            var parameters = ["prtid":usr.getAccountId(), "id":user.getUserID()] as [String : Any]
+            var parameters = Dictionary<String,Any>()
+            parameters = ["prtid":usr.getAccountId(), "id":user.getUserID(), "DATA":[]] as [String : Any]
+            var valueData = [String:Any]()
             for (key,value) in onBoarding.__get_hash_map(){
-                parameters.updateValue(value, forKey: key)
+                if(defineParams.contains(key)){
+                    parameters.updateValue(value, forKey: key)
+                }else{
+                    valueData[key] = value
+                }
             }
+            
+            parameters["DATA"] = valueData
 //
 //            var urlRequest = self.getEndPointURLRequest(endPoint: "onboarding",param: "cd")
 //            let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])

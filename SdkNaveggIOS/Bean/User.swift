@@ -24,7 +24,7 @@ struct User {
     "interest", "career", "cluster",
     "", "custom", "industry", "everybuyer" //empty one was prolook
     ];
-    var onBoarding:OnBoarding?
+    var onBoarding:OnBoarding
     var ws = WebService()
     var dateLastSync:Date?=nil
     var customListPermanent = [Int]()
@@ -37,6 +37,7 @@ struct User {
         self.context = context
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!
         self.userId = defaults.string(forKey: "NVGSDK_USERID")
+        self.onBoarding = OnBoarding(defaults: defaults)
         self.loadResourcesFromSharedObject()
         
         
@@ -52,7 +53,6 @@ struct User {
                     self.listPageView = [PageViewer]()
                 }
             }
-            
         }else{
             self.listPageView = [PageViewer]()
         }
@@ -69,13 +69,6 @@ struct User {
             self.listCustom = [Int]()
         }
         
-        if(self.defaults.dictionary(forKey: "onBoarding") != nil){
-            self.valueData = self.defaults.dictionary(forKey: "onBoarding")!
-            if(self.valueData.count == 0){
-                self.onBoarding = OnBoarding(defaults: defaults)
-            }
-        }
-        self.onBoarding = OnBoarding(defaults: defaults)
         
         if(defaults.dictionary(forKey: "jsonSegments") != nil){
             self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")!
@@ -262,12 +255,12 @@ struct User {
     
     
     /* OnBoarding */
-    func setOnBoarding(key:String, value:String){
-        self.onBoarding?.addInfo(key: key, value: value)
+    mutating func setOnBoarding(key:String, value:String){
+        self.onBoarding.addInfo(key: key, value: value)
     }
     
     func getOnBoarding()->OnBoarding{
-        return self.onBoarding!
+        return self.onBoarding
     }
     
     /* Send Data when user lay app in background or close app and after open the app */
