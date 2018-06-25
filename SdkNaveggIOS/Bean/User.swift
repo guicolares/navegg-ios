@@ -33,6 +33,10 @@ struct User {
 
     init(accountId : Int? = 0, context:AnyObject){
         
+        if let bundleID = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleID)
+        }
+        
         self.accountId = accountId
         self.context = context
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!

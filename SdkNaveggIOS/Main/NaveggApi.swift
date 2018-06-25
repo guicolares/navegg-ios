@@ -21,19 +21,25 @@ public class NaveggApi:NSObject{
   
     
     
-    required public init(cod:Int, context: AnyObject, idAppStore:Int?=0){
-        self.defaults = UserDefaults.init(suiteName:"NVGSDK\(cod)")!
-        self.defaults.set(cod, forKey: "NVGSDK_CODCONTA")
+    required public init(accountId:Int, context: AnyObject, idAppStore:Int?=0){
+        
+        if let bundleID = Bundle.main.bundleIdentifier {
+            UserDefaults.standard.removePersistentDomain(forName: bundleID)
+        }
+        print("CLEANDED SDK")
+        
+        self.defaults = UserDefaults.init(suiteName:"NVGSDK\(accountId)")!
+        self.defaults.set(accountId, forKey: "NVGSDK_CODCONTA")
         self.defaults.set(idAppStore, forKey: "NVGSDK_IDAPPSTORE")
-        self.user = User(accountId: cod, context: context)
+        self.user = User(accountId: accountId, context: context)
         self.appDelegate = context
         LocationPosition.sharedLocation.determineMyCurrentLocation()
         
         if (self.user.getUserID() == "0") {
-            self.ws.createUser(user: user, acc:cod)
+            self.ws.createUser(user: user, acc:accountId)
         }
         super.init()
-        registerReceiverAndAccountSdk(cod: cod)
+        registerReceiverAndAccountSdk(cod: accountId)
         
     }
     

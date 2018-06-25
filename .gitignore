@@ -25,6 +25,8 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
+Output/
+Pods/
 
 ## Obj-C/Swift specific
 *.hmap

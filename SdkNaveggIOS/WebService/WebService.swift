@@ -26,6 +26,7 @@ class WebService{
     init (){
         let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
         sessionConfig = Alamofire.SessionManager(configuration: configuration)
+        
     }
     
     func ENDPOINTS(url : String) -> String {
@@ -34,12 +35,13 @@ class WebService{
     }
     
     func getEndPoint(endPoint:String,param:String)->String{
-        return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
+        return "http://local.navdmp.com/\(param)";
+        //return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
     }
     
     func getEndPointURLRequest(endPoint:String,param:String) -> URLRequest {
         
-        var request = URLRequest(url: URL(string: "http://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)")!)
+        var request = URLRequest(url: URL(string: self.getEndPoint(endPoint: endPoint, param: param))!)
         request.httpMethod = HTTPMethod.post.rawValue
         request.setValue("application/protobuf", forHTTPHeaderField: "Content-Type")
         request.setValue("application/protobuf", forHTTPHeaderField: "Accept")
@@ -112,7 +114,7 @@ class WebService{
         }
 
         if (util.isConnectedInternet()){
-            var usr = user
+            let usr = user
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             for id_custom in listCustom{
             sessionConfig.request(self.getEndPoint(endPoint: "request",param: "cus"),
