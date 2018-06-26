@@ -10,7 +10,7 @@ import Foundation
 
 struct User {
     var userId : String?
-    var accountId : Int?
+    var accountId : Int
     var util = Util()
     private let defaults : UserDefaults
     let context : AnyObject
@@ -25,13 +25,13 @@ struct User {
     "", "custom", "industry", "everybuyer" //empty one was prolook
     ];
     var onBoarding:OnBoarding
-    var ws = WebService()
+    let ws = WebService()
     var dateLastSync:Date?=nil
     var customListPermanent = [Int]()
     
     var jsonSegments = [String:Any]()
 
-    init(accountId : Int? = 0, context:AnyObject){
+    init(accountId : Int, context:AnyObject){
         
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
@@ -45,6 +45,31 @@ struct User {
         self.loadResourcesFromSharedObject()
         
         
+    }
+    
+    mutating func createUserId(){
+        let userId = self.ws.createUser(acc:self.accountId)
+        self.__set_user_id(userID: userId)
+        self.setToDataMobileInfo(sendMobileinfo: true);
+        self.sendDataMobileInfo()
+        //self.getSegments()
+    }
+    
+    mutating func sendDataMobileInfo(){
+        self.ws.sendDataMobileInfo(user: self, mobileInfo: try! self.getDataMobileInfo())
+    }
+    
+    mutating func sendDataTrack(){
+        self.ws.sendDataTrack(user: self, pageView: self.getPageView())
+    }
+    
+    
+    mutating func sendCustomList(){
+        self.ws.sendCustomList(user: self, listCustom: self.getCustomList())
+    }
+    
+    mutating func sendOnBoarding(){
+        self.ws.sendOnBoarding(user: self, onBoarding: self.getOnBoarding())
     }
     
     private mutating func loadResourcesFromSharedObject(){
@@ -83,9 +108,10 @@ struct User {
         }
     }
     
-    mutating func __set_user_id(userID :String){
+    mutating func __set_user_id(userID :String?){
+        
         self.userId = userID
-        defaults.set(userID, forKey: "NVGSDK_USERID")
+        defaults.set(self.userId, forKey: "NVGSDK_USERID")
     }
     
     /* MobileInfo */
@@ -124,10 +150,7 @@ struct User {
     }
     
     func getAccountId()->UInt32{
-        if self.accountId == nil || self.accountId == 0{
-            return 0
-        }
-        return UInt32(self.accountId!)
+        return UInt32(self.accountId)
     }
     
     func setToDataMobileInfo(sendMobileinfo : Bool){
@@ -269,16 +292,15 @@ struct User {
     
     /* Send Data when user lay app in background or close app and after open the app */
     mutating func sendDataSaveInDefault(){
-        ws = WebService()
         if(util.isConnectedInternet()){
             if(getPageView().count > 0 ){
-                ws.sendDataTrack(user: self, pageView: getPageView())
+                self.ws.sendDataTrack(user: self, pageView: getPageView())
             }
             if(getCustomList().count > 0){
-                ws.sendCustomList(user: self, listCustom: getCustomList())
+                self.ws.sendCustomList(user: self, listCustom: getCustomList())
             }
             if(!getOnBoarding().hasToSendOnBoarding()){
-                ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
+                self.ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
             }
         }
     }

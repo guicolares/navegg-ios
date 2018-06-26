@@ -19,14 +19,14 @@ class WebService{
         .endLineWithLineFeed,
         .endLineWithCarriageReturn
     ]
-    let sessionConfig:SessionManager
+    //let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
+    var sessionConfig:SessionManager
     
     let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
     
     init (){
-        let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
-        sessionConfig = Alamofire.SessionManager(configuration: configuration)
-        
+        print("no Init...")
+        self.sessionConfig = Alamofire.SessionManager(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
     }
     
     func ENDPOINTS(url : String) -> String {
@@ -35,6 +35,7 @@ class WebService{
     }
     
     func getEndPoint(endPoint:String,param:String)->String{
+        print("getting end point: \(endPoint)")
         return "http://local.navdmp.com/\(param)";
         //return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
     }
@@ -50,26 +51,42 @@ class WebService{
         return request
     }
     
-    public func createUser (user: User, acc:Int) {
+    public func createUser (acc:Int) ->String {
+        print("criando o user...")
+        var userId = "0"
         if(util.isConnectedInternet()){
-            var usr = user
-            sessionConfig.request(self.getEndPoint(endPoint: "user",param: "usr"),
-                              parameters: ["acc":acc, "devid": util.getDeviceId()],
-                              headers: self.headers).response{ (response) in
-                do {
-                    if let responseData =  String(data: response.data!, encoding: String.Encoding.utf8)?.replacingOccurrences(of: "\'", with: "\"").data(using: String.Encoding.utf8)
-                    {
-                        var jsonData = try JSONSerialization.jsonObject(with: responseData, options: .allowFragments) as? [String:Any]
-                        usr.__set_user_id(userID:jsonData!["nvgid"]! as! String)
-                        usr.setToDataMobileInfo(sendMobileinfo: true);
-                        self.sendDataMobileInfo(user: usr, mobileInfo: try usr.getDataMobileInfo())
-                        self.getSegments(user: usr)
+            print("tem internet...")
+            self.sessionConfig.request(
+                self.getEndPoint(endPoint: "user",param: "usr"),
+                parameters: ["acc":acc, "devid": util.getDeviceId()],
+                headers: self.headers
+            ).validate().responseJSON {
+                response in
+                switch (response.result) {
+                case .success:
+                    do {
+                        print("no result: ")
+                        print(response.data!)
+                        if let responseData =  String(data: response.data!, encoding: String.Encoding.utf8)?.replacingOccurrences(of: "\'", with: "\"").data(using: String.Encoding.utf8)
+                        {
+                            var jsonData = try JSONSerialization.jsonObject(with: responseData, options: .allowFragments) as? [String:Any]
+                            userId = jsonData!["nvgid"] as! String
+                        }
+                    } catch {
+                        print("catch createUser WebService...")
+                        Thread.callStackSymbols.forEach{print($0)}
                     }
-                } catch {
-                    
+                
+                break
+                case .failure(let error):
+                    print("error - > \n    \(error.localizedDescription) \n")
+                    //let statusCode = response.response?.statusCode
+                    //self.completionBlock?(statusCode, error)
+                break
                 }
             }
         }
+        return userId
     }
     
     public func sendDataMobileInfo(user:User, mobileInfo:MobileInfo){

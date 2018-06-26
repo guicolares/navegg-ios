@@ -13,7 +13,6 @@ import Reachability
 public class NaveggApi:NSObject{
     private var defaults : UserDefaults
     private let util = Util()
-    private let ws = WebService()
     private var user : User
     private let reachability = Reachability()!
     private var appDelegate: AnyObject
@@ -26,7 +25,7 @@ public class NaveggApi:NSObject{
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
-        print("CLEANDED SDK")
+        print("CLEANDED SDK 2")
         
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(accountId)")!
         self.defaults.set(accountId, forKey: "NVGSDK_CODCONTA")
@@ -36,7 +35,7 @@ public class NaveggApi:NSObject{
         LocationPosition.sharedLocation.determineMyCurrentLocation()
         
         if (self.user.getUserID() == "0") {
-            self.ws.createUser(user: user, acc:accountId)
+            self.user.createUserId()
         }
         super.init()
         registerReceiverAndAccountSdk(cod: accountId)
@@ -63,20 +62,20 @@ public class NaveggApi:NSObject{
     
     public func setTrackPage(screen:String){
         if(!user.hasToSendDataMobileInfo()){
-            ws.sendDataMobileInfo(user: user, mobileInfo: try! user.getDataMobileInfo())
+            self.user.sendDataMobileInfo()
         }
         
         user.makeAPageView(screen: screen)
-        ws.sendDataTrack(user: user, pageView: user.getPageView())
+        self.user.sendDataTrack()
     }
     
     public func setCustom(id_custom:Int){
         if(!user.hasToSendDataMobileInfo()){
-            ws.sendDataMobileInfo(user: user, mobileInfo: try! user.getDataMobileInfo())
+            self.user.sendDataMobileInfo()
         }
         
         self.user.setCustom(id_custom: id_custom)
-        self.ws.sendCustomList(user: self.user, listCustom: self.user.getCustomList())
+        self.user.sendCustomList()
     }
     
     public func getSegments(segments:String) -> String{
@@ -85,7 +84,7 @@ public class NaveggApi:NSObject{
     
     public func setOnboarding (key:String, value:String){
         self.user.setOnBoarding(key: key, value: value)
-        self.ws.sendOnBoarding(user: self.user, onBoarding: self.user.getOnBoarding())
+        self.user.sendOnBoarding()
     }
     
     public func getOnBoarding(key:String)->String{
