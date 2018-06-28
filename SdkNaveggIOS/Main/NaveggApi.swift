@@ -22,11 +22,6 @@ public class NaveggApi:NSObject{
     
     required public init(accountId:Int, context: AnyObject, idAppStore:Int?=0){
         
-        if let bundleID = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
-        print("CLEANDED SDK 2")
-        
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(accountId)")!
         self.defaults.set(accountId, forKey: "NVGSDK_CODCONTA")
         self.defaults.set(idAppStore, forKey: "NVGSDK_IDAPPSTORE")
@@ -34,7 +29,7 @@ public class NaveggApi:NSObject{
         self.appDelegate = context
         LocationPosition.sharedLocation.determineMyCurrentLocation()
         
-        if (self.user.getUserID() == "0") {
+        if (self.user.getUserId() == "0") {
             self.user.createUserId()
         }
         super.init()
@@ -89,6 +84,10 @@ public class NaveggApi:NSObject{
     
     public func getOnBoarding(key:String)->String{
         return self.user.getOnBoarding().getInfo(key: key)
+    }
+    
+    public func getUserId()->String {
+        return self.user.getUserId()
     }
     
     

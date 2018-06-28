@@ -11,6 +11,7 @@ import Reachability
 import UIKit
 import WebKit
 import Alamofire
+import AdSupport
 
 class Util {
     
@@ -56,7 +57,11 @@ class Util {
 
 
     func getDeviceId()->String{
-        return UIDevice.current.identifierForVendor?.uuidString as String!
+        var strIDFA = "0"
+        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+            strIDFA = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        }
+        return strIDFA
     }
     
     func getTypeCategory() -> String {

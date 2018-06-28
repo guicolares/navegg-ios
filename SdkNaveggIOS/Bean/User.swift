@@ -12,18 +12,10 @@ struct User {
     var userId : String?
     var accountId : Int
     var util = Util()
-    private let defaults : UserDefaults
+    var defaults  : UserDefaults
     let context : AnyObject
     var listPageView = [PageViewer]()
     var listCustom = [Int]()
-    var valueData = [String:Any]()
-    let listSegments:[String] = [
-    "gender", "age", "education", "marital",
-    "income", "city", "region", "country",
-    "connection", "brand", "product",
-    "interest", "career", "cluster",
-    "", "custom", "industry", "everybuyer" //empty one was prolook
-    ];
     var onBoarding:OnBoarding
     let ws = WebService()
     var dateLastSync:Date?=nil
@@ -33,26 +25,18 @@ struct User {
 
     init(accountId : Int, context:AnyObject){
         
-        if let bundleID = Bundle.main.bundleIdentifier {
-            UserDefaults.standard.removePersistentDomain(forName: bundleID)
-        }
-        
         self.accountId = accountId
         self.context = context
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!
-        self.userId = defaults.string(forKey: "NVGSDK_USERID")
-        self.onBoarding = OnBoarding(defaults: defaults)
+        self.userId = self.defaults.string(forKey: "NVGSDK_USERID")
+        //self.userId = "0" //DEV
+        self.onBoarding = OnBoarding(defaults: self.defaults)
         self.loadResourcesFromSharedObject()
-        
         
     }
     
     mutating func createUserId(){
-        let userId = self.ws.createUser(acc:self.accountId)
-        self.__set_user_id(userID: userId)
-        self.setToDataMobileInfo(sendMobileinfo: true);
-        self.sendDataMobileInfo()
-        //self.getSegments()
+        self.ws.createUser(user:self, acc:self.accountId)
     }
     
     mutating func sendDataMobileInfo(){
@@ -74,7 +58,7 @@ struct User {
     
     private mutating func loadResourcesFromSharedObject(){
         /* Page View */
-        if(defaults.object(forKey: "listAppPageView") != nil){
+        if(self.defaults.object(forKey: "listAppPageView") != nil){
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
             if(jsonSerData != nil){
                 self.listPageView = try! JSONDecoder().decode([PageViewer].self, from: jsonSerData!)
@@ -97,9 +81,9 @@ struct User {
         }else{
             self.listCustom = [Int]()
         }
-        
-        
-        if(defaults.dictionary(forKey: "jsonSegments") != nil){
+        print("checando jsonSegments.....\(self.defaults.array(forKey: "jsonSegments"))")
+        if(self.defaults.dictionary(forKey: "jsonSegments") != nil){
+            print("has jsonSegments...")
             self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")!
         }
         
@@ -111,8 +95,11 @@ struct User {
     mutating func __set_user_id(userID :String?){
         
         self.userId = userID
-        defaults.set(self.userId, forKey: "NVGSDK_USERID")
+        self.defaults.set(self.userId, forKey: "NVGSDK_USERID")
+        self.defaults.synchronize()
     }
+    
+
     
     /* MobileInfo */
     func getDataMobileInfo() throws ->MobileInfo{
@@ -135,14 +122,13 @@ struct User {
         mobInfo.imei = util.getDeviceId() // IOS não permite pegar o imei, e recomenda usar o Device ID como IMEI
         mobInfo.softwareVersion = ""
         mobInfo.languageApp = util.getLanguageApp()
-//        mobInfo.userID = getUserID()
-        mobInfo.userID = "12d450cac700b4f1f7491806"
+        mobInfo.userID = self.getUserId()
         mobInfo.acc = getAccountId()
         
         return mobInfo
     }
     
-    func getUserID()->String{
+    public func getUserId()->String{
         if self.userId == nil || self.userId == "0"{
             return "0"
         }
@@ -240,15 +226,11 @@ struct User {
                 ws.getSegments(user: self)
             }
         }
-      
-//        self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")
         
-        if((self.jsonSegments.count) > 0){
-            let segment = self.jsonSegments.index(forKey: segments)
-            if(segment != nil){
-                idSegments = jsonSegments[segment!].value as! String
-            }
+        if self.jsonSegments[segments] != nil {
+            idSegments = self.jsonSegments[segments] as! String
         }
+        
         return idSegments
     }
     
@@ -262,22 +244,12 @@ struct User {
     }
     
 
-    mutating func saveSegments(segments:String){
-        let date = Date()
-        let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
-        let indexOf1 = segments[segments.index(segments.startIndex,offsetBy: segments.distance(from: segments.startIndex  , to: cut1) )...]
-        
-        let indexOf2 = indexOf1[...indexOf1.index(indexOf1.endIndex,offsetBy: -4)]
-        
-        let seg = indexOf2.split(separator: ":", omittingEmptySubsequences: false)
-        let jsonObject : NSMutableDictionary = NSMutableDictionary()
-        for (index,segment) in listSegments.enumerated(){
-            if(seg[index].count>0){
-                jsonObject.setValue(String(describing: seg[index]), forKey: segment)
-            }
-        }
-        defaults.setValue(jsonObject, forKey: "jsonSegments")
-        defaults.setValue(util.DateToString(date: date), forKey: "dateLastSync")
+    mutating func saveSegments(segments:[String:Any]){
+        self.jsonSegments = segments
+        print("on saveSegments: \(segments)")
+        self.defaults.setValue(segments, forKey: "jsonSegments")
+        self.defaults.setValue(util.DateToString(date: Date()), forKey: "dateLastSync")
+        //self.defaults.synchronize()
     }
     
     
@@ -307,26 +279,19 @@ struct User {
     
     mutating func distintcCustomSegment(){
         
-        let segment = self.jsonSegments.index(forKey: "custom")
-        var idSegments : String = ""
-        if(segment != nil){
-            idSegments = self.jsonSegments[segment!].value as! String
-        }else{
-            self.jsonSegments["custom"] = [String:Any]();
+        var customs:[String] = [String]()
+        
+        if self.jsonSegments["custom"] != nil {
+            customs = (self.jsonSegments["custom"] as! String).components(separatedBy: "-")
         }
         
         for value in customListPermanent{
-            if idSegments.range(of:"\(value)") == nil {
-                if(idSegments.count > 0){
-                    idSegments += "-\(value)"
-                }else{
-                    idSegments += "\(value)"
-                }
+            if !customs.contains(where:{$0 == "\(value)"}) { // if not in custom segments
+                customs.append("\(value)")
             }
         }
         
-        self.jsonSegments.updateValue(idSegments, forKey: "custom")
+        self.jsonSegments["custom"] = customs.joined(separator: "-")
     
     }
-    
 }
