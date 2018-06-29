@@ -13,16 +13,17 @@ import Alamofire
 class WebService{
     // HASH COnta 666 = "29a359c0409a86dd64d03"
     
-    let headers:[String:String] = ["User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", "content-type":"application/octet-stream"]
+    let headers:[String:String] = [
+        "User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
+        "content-type":"application/octet-stream"]
     let util = Util()
     let options : Data.Base64EncodingOptions = [
         .endLineWithLineFeed,
         .endLineWithCarriageReturn
     ]
-    //let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
     var sessionConfig:SessionManager
-    
     let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
+    var runningCreateUser:Bool!
     
     init (){
         self.sessionConfig = Alamofire.SessionManager(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
@@ -34,8 +35,8 @@ class WebService{
     }
     
     func getEndPoint(endPoint:String,param:String)->String{
-        return "http://local.navdmp.com/\(param)";
-        //return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
+        //return "http://local.navdmp.com/\(param)";
+        return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
     }
     
     func getEndPointURLRequest(endPoint:String,param:String) -> URLRequest {
@@ -50,6 +51,10 @@ class WebService{
     }
     
     public func createUser (user:User, acc:Int){
+        if self.runningCreateUser == true{
+            return
+        }
+        self.runningCreateUser = true
         if(util.isConnectedInternet()){
             self.sessionConfig.request(
                 self.getEndPoint(endPoint: "user",param: "usr"),
@@ -65,20 +70,22 @@ class WebService{
                         print("on createUser: \(userId)")
                         var usr = user // WHY?!?
                         usr.__set_user_id(userID: userId)
+                        self.runningCreateUser = false
                         usr.setToDataMobileInfo(sendMobileinfo: true);
                         usr.sendDataMobileInfo()
                         self.getSegments(user: usr)
 
                     } catch {
+                        self.runningCreateUser = false
                         print("catch createUser WebService...")
                         Thread.callStackSymbols.forEach{print($0)}
                     }
                 
                 break
-                case .failure(let error):
-                    print("error - > \n    \(error.localizedDescription) \n")
-                    //let statusCode = response.response?.statusCode
-                    //self.completionBlock?(statusCode, error)
+                case .failure:
+                    self.runningCreateUser = false
+                    print("NavegAPI: warning - createUserId - something went wrong with endpoint, will retry later")
+                    //print("error - > \n    \(error.localizedDescription) \n")
                 break
                 }
             }
@@ -96,8 +103,15 @@ class WebService{
 
             let mobInfo = try! mobileInfo.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = mobInfo
-            sessionConfig.request(urlRequest).responseString{ (response) in
-                usr.setToDataMobileInfo(sendMobileinfo: true)
+            sessionConfig.request(urlRequest).responseString{ response in
+                switch(response.result){
+                case .success:
+                    usr.setToDataMobileInfo(sendMobileinfo: true)
+                break
+                case .failure:
+                    print("NavegAPI: warning - sendDataMobileInfo - something went wrong with endpoint, will retry later")
+                break
+                }
             }
         }else{
            usr.setToDataMobileInfo(sendMobileinfo: false)
@@ -115,10 +129,17 @@ class WebService{
             let trackInfo = try! pageTrack.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = trackInfo
             sessionConfig.request(urlRequest).responseString{ (response) in
-                usr.clearListPageView()
+                switch(response.result){
+                    case .success:
+                        usr.clearListPageView()
+                    break
+                case .failure:
+                        print("NavegAPI: warning - sendDataMobileInfo - something went wrong with endpoint, will retry later")
+                    
+                break
+                }
             }
         }
-        
     }
     
     public func sendCustomList(user:User, listCustom:[Int]){
@@ -127,16 +148,25 @@ class WebService{
         }
 
         if (util.isConnectedInternet()){
-            let usr = user
+            var usr = user
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             for id_custom in listCustom{
-            sessionConfig.request(self.getEndPoint(endPoint: "request",param: "cus"),
-                  parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserId()],
-                  headers: self.headers).response(queue:queue,completionHandler:{(response) in
-                        //usr.removeCustom(id_custom: id_custom)
-                        }
-                )
-            }
+            sessionConfig.request(
+                self.getEndPoint(endPoint: "request",param: "cus"),
+                parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserId()],
+                headers: self.headers).responseString(queue:queue,completionHandler:{(response) in
+                    switch(response.result){
+                        case .success:
+                            usr.removeCustom(id_custom: id_custom)
+                        break
+                    case .failure:
+                            print("NavegAPI: warning - sendCustomList - something went wrong with endpoint, will retry later")
+                        
+                    break
+                    }
+                }
+            )
+        }
         }else{
             
         }
@@ -175,10 +205,9 @@ class WebService{
                                     }
                                     
                                     break
-                                case .failure(let error):
-                                    print("error getSegments - > \n    \(error.localizedDescription) \n")
-                                    //let statusCode = response.response?.statusCode
-                                    //self.completionBlock?(statusCode, error)
+                                case .failure: // let error
+                                    print("NavegAPI: warning - getSegments - something went wrong with endpoint, will retry later")
+                                    //print("error getSegments - > \n    \(error.localizedDescription) \n")
                                     break
                                 }
             }
@@ -204,8 +233,19 @@ class WebService{
             
             parameters["DATA"] = valueData
 
-            sessionConfig.request(self.getEndPoint(endPoint: "onboarding",param: "cd"),parameters:parameters,headers: self.headers).responseString{ (response) in
-                user.getOnBoarding().__set_to_send_onBoarding(status: true)
+            sessionConfig.request(
+                self.getEndPoint(endPoint: "onboarding",param: "cd"),
+                parameters:parameters,
+                headers: self.headers
+            ).responseString{ (response) in
+                switch(response.result){
+                case .success:
+                    user.getOnBoarding().__set_to_send_onBoarding(status: true)
+                break
+                case .failure:
+                    print("NavegAPI: warning - sendOnBoarding - something went wrong with endpoint, will retry later")
+                break
+                }
             }
         }
     }

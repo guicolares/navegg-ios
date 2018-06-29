@@ -31,6 +31,9 @@ struct User {
         self.userId = self.defaults.string(forKey: "NVGSDK_USERID")
         //self.userId = "0" //DEV
         self.onBoarding = OnBoarding(defaults: self.defaults)
+        if self.userId == nil || self.userId == "0"{
+            self.createUserId()
+        }
         self.loadResourcesFromSharedObject()
         
     }
@@ -81,9 +84,8 @@ struct User {
         }else{
             self.listCustom = [Int]()
         }
-        print("checando jsonSegments.....\(self.defaults.array(forKey: "jsonSegments"))")
+        
         if(self.defaults.dictionary(forKey: "jsonSegments") != nil){
-            print("has jsonSegments...")
             self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")!
         }
         
@@ -246,7 +248,6 @@ struct User {
 
     mutating func saveSegments(segments:[String:Any]){
         self.jsonSegments = segments
-        print("on saveSegments: \(segments)")
         self.defaults.setValue(segments, forKey: "jsonSegments")
         self.defaults.setValue(util.DateToString(date: Date()), forKey: "dateLastSync")
         //self.defaults.synchronize()

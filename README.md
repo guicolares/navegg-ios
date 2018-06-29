@@ -11,3 +11,28 @@ Menu -> Clean
 Menu -> Build
 
 In Navigator inside products, click right in the SdkNaveggIOS.Framework and Show in Finder.
+
+
+
+# local DEV
+
+## put HTTP local.navdmp.com
+ - Add the following lines into SDKNaveggIOS -> Info.plist
+
+        `<key>NSAppTransportSecurity</key>
+        <dict>
+                <key>NSAllowsArbitraryLoads</key>
+                <true/>
+                <key>NSExceptionDomains</key>
+                <dict>
+                        <key>navdmp.com</key>
+                        <dict>
+                                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                                <true/>
+                                <key>NSIncludesSubdomains</key>
+                                <true/>
+                                <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                                <false/>
+                        </dict>
+                </dict>
+        </dict>`
