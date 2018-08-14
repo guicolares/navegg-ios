@@ -74,7 +74,11 @@ public class NaveggApi:NSObject{
     }
     
     public func getSegments(segments:String) -> String{
-        return self.user.getSegments(segments: segments);
+        do {
+            return try self.user.getSegments(segments: segments);
+        } catch {
+            return "";
+        }
     }
     
     public func setOnboarding (key:String, value:String){

@@ -217,14 +217,14 @@ struct User {
     
     
     /* Segments */
-    mutating func getSegments(segments:String)->String{
+    mutating func getSegments(segments:String) throws ->String{
         var idSegments:String = ""
         let currentDate = Date()
         let stringDate = defaults.string(forKey: "dateLastSync")
         distintcCustomSegment()
         if(stringDate != nil){
             self.dateLastSync = util.StringToDate(dateString: stringDate!)
-            if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) == 1){
+            if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) >= 1){
                 ws.getSegments(user: self)
             }
         }
