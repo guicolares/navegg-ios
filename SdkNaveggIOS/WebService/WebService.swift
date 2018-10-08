@@ -197,7 +197,7 @@ class WebService{
                                 switch (response.result) {
                                 case .success:
                                     do {
-                                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as! [String:Any]
+                                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as! [String:String]
                                         usr.saveSegments(segments: jsonData)
                                     } catch {
                                         print("catch createUser WebService...")

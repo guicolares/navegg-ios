@@ -21,7 +21,7 @@ struct User {
     var dateLastSync:Date?=nil
     var customListPermanent = [Int]()
     
-    var jsonSegments = [String:Any]()
+    var jsonSegments = [String:String]()
 
     init(accountId : Int, context:AnyObject){
         
@@ -86,7 +86,7 @@ struct User {
         }
         
         if(self.defaults.dictionary(forKey: "jsonSegments") != nil){
-            self.jsonSegments = defaults.dictionary(forKey: "jsonSegments")!
+            self.jsonSegments = self.defaults.dictionary(forKey: "jsonSegments") as! [String:String]
         }
         
         if(defaults.array(forKey: "customListAux") != nil){
@@ -230,7 +230,7 @@ struct User {
         }
         
         if self.jsonSegments[segments] != nil {
-            idSegments = self.jsonSegments[segments] as! String
+            idSegments = self.jsonSegments[segments]!
         }
         
         return idSegments
@@ -246,7 +246,7 @@ struct User {
     }
     
 
-    mutating func saveSegments(segments:[String:Any]){
+    mutating func saveSegments(segments:[String:String]){
         self.jsonSegments = segments
         self.defaults.setValue(segments, forKey: "jsonSegments")
         self.defaults.setValue(util.DateToString(date: Date()), forKey: "dateLastSync")
@@ -283,7 +283,7 @@ struct User {
         var customs:[String] = [String]()
         
         if self.jsonSegments["custom"] != nil {
-            customs = (self.jsonSegments["custom"] as! String).components(separatedBy: "-")
+            customs = (self.jsonSegments["custom"]!).components(separatedBy: "-")
         }
         
         for value in customListPermanent{
