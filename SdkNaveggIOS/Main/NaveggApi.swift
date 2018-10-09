@@ -7,14 +7,11 @@
 //
 import Foundation
 import Alamofire
-import Reachability
-
 
 public class NaveggApi:NSObject{
     private var defaults : UserDefaults
     private let util = Util()
     private var user : User
-    private let reachability = Reachability()!
     private var appDelegate: AnyObject
     let NetworkReachabilityChanged = NSNotification.Name("NetworkReachabilityChanged")
   
