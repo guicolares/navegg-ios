@@ -36,3 +36,9 @@ In Navigator inside products, click right in the SdkNaveggIOS.Framework and Show
                         </dict>
                 </dict>
         </dict>`
+
+## Using pod
+
+ `pod update
+  pod install 
+`

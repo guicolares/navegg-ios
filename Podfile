@@ -11,9 +11,9 @@ target 'SdkNaveggIOS' do
     pod 'Alamofire', '~> 4.6'
 
 
-  target 'SdkNaveggIOSTests' do
-    inherit! :search_paths
+    # target 'SdkNaveggIOSTests' do
+    #    inherit! :search_paths
     # Pods for testing
-  end
+    # end
 
 end
