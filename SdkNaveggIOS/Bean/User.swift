@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct User {
+class User {
     var userId : String?
     var accountId : Int
     var util = Util()
@@ -35,31 +35,29 @@ struct User {
             self.createUserId()
         }
         self.loadResourcesFromSharedObject()
-        
     }
     
-    mutating func createUserId(){
+    func createUserId(){
         self.ws.createUser(user:self, acc:self.accountId)
     }
     
-    mutating func sendDataMobileInfo(){
+    func sendDataMobileInfo(){
         self.ws.sendDataMobileInfo(user: self, mobileInfo: try! self.getDataMobileInfo())
     }
     
-    mutating func sendDataTrack(){
+    func sendDataTrack(){
         self.ws.sendDataTrack(user: self, pageView: self.getPageView())
     }
     
-    
-    mutating func sendCustomList(){
+    func sendCustomList(){
         self.ws.sendCustomList(user: self, listCustom: self.getCustomList())
     }
     
-    mutating func sendOnBoarding(){
+    func sendOnBoarding(){
         self.ws.sendOnBoarding(user: self, onBoarding: self.getOnBoarding())
     }
     
-    private mutating func loadResourcesFromSharedObject(){
+    private func loadResourcesFromSharedObject(){
         /* Page View */
         if(self.defaults.object(forKey: "listAppPageView") != nil){
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
@@ -94,14 +92,12 @@ struct User {
         }
     }
     
-    mutating func __set_user_id(userID :String?){
+    func __set_user_id(userID :String?){
         
         self.userId = userID
         self.defaults.set(self.userId, forKey: "NVGSDK_USERID")
         self.defaults.synchronize()
     }
-    
-
     
     /* MobileInfo */
     func getDataMobileInfo() throws ->MobileInfo{
@@ -150,7 +146,7 @@ struct User {
     }
     
     /* Track */
-    mutating func makeAPageView(screen:String){
+    func makeAPageView(screen:String){
         
         let pageView = PageViewer(
             view: screen,
@@ -167,9 +163,7 @@ struct User {
         
     }
     
-    
-    
-    mutating func getPageView()->[PageViewer]{
+    func getPageView()->[PageViewer]{
 
         if(defaults.object(forKey: "listAppPageView") != nil){
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
@@ -178,13 +172,13 @@ struct User {
         return listPageView
     }
     
-    mutating func clearListPageView(){
+    func clearListPageView(){
         defaults.removeObject(forKey: "listAppPageView")
         listPageView.removeAll()
     }
     
     /* Custom */
-    mutating func setCustom(id_custom:Int){
+    func setCustom(id_custom:Int){
         self.listCustom.append(id_custom)
         
         self.setCustomInPositionSegment(custom: id_custom)
@@ -194,7 +188,7 @@ struct User {
         defaults.synchronize()
     }
     
-    mutating func getCustomList() -> [Int]{
+    func getCustomList() -> [Int]{
         if(defaults.object(forKey: "customList") != nil){
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "customList") as! Data)!)
             listCustom = try! JSONDecoder().decode([Int].self, from: jsonSerData!)
@@ -202,7 +196,7 @@ struct User {
         return listCustom
     }
     
-    mutating func removeCustom(id_custom:Int){
+    func removeCustom(id_custom:Int){
         if let index = self.listCustom.index(of: id_custom) {
             self.listCustom.remove(at: index)
         }
@@ -215,9 +209,8 @@ struct User {
         }
     }
     
-    
     /* Segments */
-    mutating func getSegments(segments:String) throws ->String{
+    func getSegments(segments:String) throws ->String{
         var idSegments:String = ""
         let currentDate = Date()
         let stringDate = defaults.string(forKey: "dateLastSync")
@@ -236,17 +229,15 @@ struct User {
         return idSegments
     }
     
-    
-   mutating func setCustomInPositionSegment(custom:Int){
+    func setCustomInPositionSegment(custom:Int){
         if(!self.customListPermanent.contains(custom)){
                 self.customListPermanent.append(custom)
                 defaults.setValue(self.customListPermanent , forKey: "customListAux")
                 defaults.synchronize()
         }
     }
-    
 
-    mutating func saveSegments(segments:[String:String]){
+    func saveSegments(segments:[String:String]){
         self.jsonSegments = segments
         self.defaults.setValue(segments, forKey: "jsonSegments")
         self.defaults.setValue(util.DateToString(date: Date()), forKey: "dateLastSync")
@@ -255,7 +246,7 @@ struct User {
     
     
     /* OnBoarding */
-    mutating func setOnBoarding(key:String, value:String){
+    func setOnBoarding(key:String, value:String){
         self.onBoarding.addInfo(key: key, value: value)
     }
     
@@ -264,7 +255,7 @@ struct User {
     }
     
     /* Send Data when user lay app in background or close app and after open the app */
-    mutating func sendDataSaveInDefault(){
+    func sendDataSaveInDefault(){
         if(util.isConnectedInternet()){
             if(getPageView().count > 0 ){
                 self.ws.sendDataTrack(user: self, pageView: getPageView())
@@ -278,7 +269,7 @@ struct User {
         }
     }
     
-    mutating func distintcCustomSegment(){
+    func distintcCustomSegment(){
         
         var customs:[String] = [String]()
         
@@ -293,6 +284,5 @@ struct User {
         }
         
         self.jsonSegments["custom"] = customs.joined(separator: "-")
-    
     }
 }
