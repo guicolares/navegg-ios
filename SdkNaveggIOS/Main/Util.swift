@@ -203,7 +203,8 @@ class Util {
         
         var trackProto = Track()
         trackProto.acc = user.getAccountId()
-        trackProto.userID = "12d450cac700b4f1f7491806"
+        //trackProto.userID = "12d450cac700b4f1f7491806"
+        trackProto.userID = user.getUserId()
         trackProto.nameApp = getNameApp()
         trackProto.deviceIp = getIpMobile()
         trackProto.typeConnection = ReachabilityManager.shared.getTypeConnection()
