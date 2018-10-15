@@ -9,7 +9,6 @@
 import Foundation
 import Alamofire
 
-
 class WebService{
     // HASH COnta 666 = "29a359c0409a86dd64d03"
     
@@ -68,7 +67,7 @@ class WebService{
                         var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
                         let userId = jsonData!["nvgid"] as! String
                         print("on createUser: \(userId)")
-                        var usr = user // WHY?!?
+                        let usr = user
                         usr.__set_user_id(userID: userId)
                         self.runningCreateUser = false
                         usr.setToDataMobileInfo(sendMobileinfo: true);
@@ -85,7 +84,6 @@ class WebService{
                 case .failure:
                     self.runningCreateUser = false
                     print("NavegAPI: warning - createUserId - something went wrong with endpoint, will retry later")
-                    //print("error - > \n    \(error.localizedDescription) \n")
                 break
                 }
             }
@@ -124,7 +122,7 @@ class WebService{
         }
         if (util.isConnectedInternet()){
             let pageTrack = util.setDataTrack(user: user, pageView: util.setListDataPageTrack(pageView: pageView))
-            var usr = user
+            let usr = user
             var urlRequest = self.getEndPointURLRequest(endPoint: "request",param: "sdkreq")
             let trackInfo = try! pageTrack.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = trackInfo
@@ -148,7 +146,7 @@ class WebService{
         }
 
         if (util.isConnectedInternet()){
-            var usr = user
+            let usr = user
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             for id_custom in listCustom{
             sessionConfig.request(
@@ -166,18 +164,15 @@ class WebService{
                     }
                 }
             )
+            }
         }
-        }else{
-            
-        }
-        
     }
     
     public func getSegments(user:User){
         if (user.getUserId() == "0"){
             return
         }
-        var usr = user
+        let usr = user
         if (util.isConnectedInternet()){
             /* wst = Want in String
                wst 0 String 1 in ID
@@ -185,31 +180,31 @@ class WebService{
                wct = 1 Want Custom
              */
             Alamofire.request(self.getEndPoint(endPoint: "user",param: "usr"),
-                              parameters: [
-                                "acc":usr.getAccountId(),
-                                "wst": 0,
-                                "v":11,
-                                "id":user.getUserId(),
-                                "asdk":util.getVersionLib(),
-                                "wct":1],
-                              headers: self.headers).responseJSON {
-                                response in
-                                switch (response.result) {
-                                case .success:
-                                    do {
-                                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as! [String:String]
-                                        usr.saveSegments(segments: jsonData)
-                                    } catch {
-                                        print("catch createUser WebService...")
-                                        Thread.callStackSymbols.forEach{print($0)}
-                                    }
-                                    
-                                    break
-                                case .failure: // let error
-                                    print("NavegAPI: warning - getSegments - something went wrong with endpoint, will retry later")
-                                    //print("error getSegments - > \n    \(error.localizedDescription) \n")
-                                    break
-                                }
+              parameters: [
+                "acc":usr.getAccountId(),
+                "wst": 0,
+                "v":11,
+                "id":user.getUserId(),
+                "asdk":util.getVersionLib(),
+                "wct":1],
+              headers: self.headers).responseJSON {
+                response in
+                switch (response.result) {
+                case .success:
+                    do {
+                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as! [String:String]
+                        usr.saveSegments(segments: jsonData)
+                    } catch {
+                        print("catch createUser WebService...")
+                        Thread.callStackSymbols.forEach{print($0)}
+                    }
+                    
+                    break
+                case .failure: // let error
+                    print("NavegAPI: warning - getSegments - something went wrong with endpoint, will retry later")
+                    //print("error getSegments - > \n    \(error.localizedDescription) \n")
+                    break
+                }
             }
         }
     }
@@ -240,7 +235,7 @@ class WebService{
             ).responseString{ (response) in
                 switch(response.result){
                 case .success:
-                    user.getOnBoarding().__set_to_send_onBoarding(status: true)
+                    usr.getOnBoarding().__set_to_send_onBoarding(status: true)
                 break
                 case .failure:
                     print("NavegAPI: warning - sendOnBoarding - something went wrong with endpoint, will retry later")
@@ -249,7 +244,4 @@ class WebService{
             }
         }
     }
-    
-    
-    
 }
