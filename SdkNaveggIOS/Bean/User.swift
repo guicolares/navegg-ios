@@ -246,8 +246,8 @@ class User {
     
     
     /* OnBoarding */
-    func setOnBoarding(key:String, value:String){
-        self.onBoarding.addInfo(key: key, value: value)
+    func setOnBoarding(key:String, value:String)->Bool{
+        return self.onBoarding.addInfo(key: key, value: value)
     }
     
     func getOnBoarding()->OnBoarding{

@@ -79,8 +79,9 @@ public class NaveggApi:NSObject{
     }
     
     public func setOnboarding (key:String, value:String){
-        self.user.setOnBoarding(key: key, value: value)
-        self.user.sendOnBoarding()
+        if self.user.setOnBoarding(key: key, value: value) {
+            self.user.sendOnBoarding()
+        }
     }
     
     public func getOnBoarding(key:String)->String{
