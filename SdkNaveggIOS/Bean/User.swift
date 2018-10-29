@@ -30,7 +30,7 @@ class User {
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!
         self.userId = self.defaults.string(forKey: "NVGSDK_USERID")
         //self.userId = "0" //DEV
-        self.onBoarding = OnBoarding(defaults: self.defaults)
+        self.onBoarding = OnBoarding(accountId: self.accountId, util: self.util, defaults: self.defaults)
         if self.userId == nil || self.userId == "0"{
             self.createUserId()
         }
@@ -219,7 +219,19 @@ class User {
             self.dateLastSync = util.StringToDate(dateString: stringDate!)
             if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) >= 1){
                 ws.getSegments(user: self)
+            } else {
+                let stringDateOnBoarding = defaults.string(forKey: "dateLastSyncOnBoarding")
+
+                if(stringDateOnBoarding != nil){
+                    let dateLastSync = util.StringToDate(dateString: stringDate!)
+                    let dateOnBoarding = util.StringToDate(dateString: stringDateOnBoarding!)
+                    if(dateLastSync < dateOnBoarding){
+                        ws.getSegments(user: self)
+                    }
+                }
             }
+        } else {
+            ws.getSegments(user: self)
         }
         
         if self.jsonSegments[segments] != nil {

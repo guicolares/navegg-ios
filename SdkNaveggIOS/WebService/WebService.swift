@@ -196,7 +196,7 @@ class WebService{
                 }
             }
 
-            Alamofire.request(self.getEndPoint(endPoint: "app",param: "app"),
+            Alamofire.request(self.getEndPoint(endPoint: "app", param: "app"),
               parameters: parameters,
               headers: self.headers).responseJSON {
                 response in
@@ -247,6 +247,7 @@ class WebService{
                 switch(response.result){
                 case .success:
                     usr.getOnBoarding().__set_to_send_onBoarding(status: true)
+                    usr.getOnBoarding().setDateLastSync(date: Date())
                 break
                 case .failure:
                     print("NavegAPI: warning - sendOnBoarding - something went wrong with endpoint, will retry later")

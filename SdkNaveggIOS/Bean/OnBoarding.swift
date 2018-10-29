@@ -7,42 +7,42 @@
 //
 
 import Foundation
-import 
 
 class OnBoarding{
     var defaults : UserDefaults
     var util :Util
     var accountId : Int
     var data: NSMutableDictionary
-    var valueData:[String:Any]
-    
-    
-    init(accountId:Integer, Util:util, defaults:UserDefaults){
+    var valueData : [String:Any]
+    var dateLastSync:String?=nil
+
+    init(accountId:Int, util:Util, defaults:UserDefaults){
         //self.valueData = Dictionary<String,Any>()
         self.data =  NSMutableDictionary()
         self.defaults = defaults
         self.accountId = accountId
         self.util = util
-
         
-        self.valueData = self.defaults.dictionary(forKey: "onBoarding" + accountId) ?? [:]
+        self.dateLastSync = self.defaults.string(forKey: "dateLastSyncOnBoarding") ?? nil
+        
+        self.valueData = self.defaults.dictionary(forKey: "onBoarding" + String(self.accountId)) ?? [:]
 
         if((self.valueData.count) == 0){
             self.valueData = [String:Any]()
         }
     }
     
-    
+   
     public func addInfo(key:String, value:String)->Bool{
-        self.valueData = self.defaults.dictionary(forKey: "onBoarding" + accountId) ?? [:]
+        self.valueData = self.defaults.dictionary(forKey: "onBoarding" + String(self.accountId)) ?? [:]
 
-        if let _check_value = valueData[key] {
+        if let _check_value = valueData[key] as? String {
             if _check_value == value {
                 let currentDate = Date()
                 let stringDate = defaults.string(forKey: "dateLastSyncOnBoarding")
                 if(stringDate != nil){
-                    self.dateLastSync = util.StringToDate(dateString: stringDate!)
-                    if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) == 0){
+                    let dateLastSync = util.StringToDate(dateString: stringDate!)
+                    if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync) == 0){
                         return false
                     }
                 }
@@ -50,7 +50,7 @@ class OnBoarding{
         }
 
         self.valueData[key] = value
-        self.defaults.set(self.valueData, forKey: "onBoarding" + accountId)
+        self.defaults.set(self.valueData, forKey: "onBoarding" + String(self.accountId))
         self.defaults.synchronize()
 
         return true
@@ -77,24 +77,12 @@ class OnBoarding{
         return self.valueData
     }
 
-    public getDateLastSync()->Int{
-
+    public func getDateLastSync()->String{
+        return self.dateLastSync!
     }
-    public void setDateLastSync(){
-
+    
+    public func setDateLastSync(date:Date){
+        self.dateLastSync = self.util.DateToString(date: date)
+        self.defaults.set(self.dateLastSync, forKey: "dateLastSyncOnBoarding")
     }
 }
-
-
-
-  public long getDateLastSync() {
-        return this.dateLastSync;
-    }
-
-    public void setDateLastSync() {
-        try {
-            this.shaPref.edit().putLong("dateLastSyncOnBoarding", Calendar.getInstance().getTime().getTime()).apply();
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
-    }
