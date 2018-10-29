@@ -29,7 +29,7 @@ class WebService{
     }
     
     func ENDPOINTS(url : String) -> String {
-        var URL : [String:String] = ["user":"usr","request":"cdn","onboarding":"cd"]
+        var URL : [String:String] = ["app":"app","request":"cdn","onboarding":"cd"]
         return URL[url]!
     }
     
@@ -56,7 +56,7 @@ class WebService{
         self.runningCreateUser = true
         if(util.isConnectedInternet()){
             self.sessionConfig.request(
-                self.getEndPoint(endPoint: "user",param: "usr"),
+                self.getEndPoint(endPoint: "app",param: "app"),
                 parameters: ["acc":acc, "devid": util.getDeviceId()],
                 headers: self.headers
             ).validate().responseJSON {
@@ -179,14 +179,25 @@ class WebService{
                v = 11 Tag Navegg Version SDK
                wct = 1 Want Custom
              */
-            Alamofire.request(self.getEndPoint(endPoint: "user",param: "usr"),
-              parameters: [
+
+            var parameters = Dictionary<String,Any>()
+            parameters = [
                 "acc":usr.getAccountId(),
                 "wst": 0,
                 "v":11,
-                "id":user.getUserId(),
+                "id":user.getUserId(), 
                 "asdk":util.getVersionLib(),
-                "wct":1],
+                "wct":1
+            ] as [String : Any]
+
+            for (key,value) in user.getOnBoarding().__get_hash_map(){
+                if(defineParams.contains(key)){
+                    parameters.updateValue(value, forKey: key)
+                }
+            }
+
+            Alamofire.request(self.getEndPoint(endPoint: "app",param: "app"),
+              parameters: parameters,
               headers: self.headers).responseJSON {
                 response in
                 switch (response.result) {
