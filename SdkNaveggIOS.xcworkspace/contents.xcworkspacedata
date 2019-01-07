@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:SdkNaveggIOS.xcodeproj">
+      location = "container:SdkNaveggIOS.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:SdkNaveggIOS.xcodeproj">
    </FileRef>
 </Workspace>
