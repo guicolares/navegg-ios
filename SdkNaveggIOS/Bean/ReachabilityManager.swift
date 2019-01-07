@@ -81,7 +81,7 @@ class ReachabilityManager {
     
     func startApplicationDidEnterBackground(user:User){
         self.user = user;
-        NotificationCenter.default.addObserver(self, selector: #selector(backGroundReachabilityChanged(_:)), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(backGroundReachabilityChanged(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         do{
             try reachability.startNotifier()
         }catch{

@@ -221,7 +221,6 @@ class User {
                 ws.getSegments(user: self)
             } else {
                 let stringDateOnBoarding = defaults.string(forKey: "dateLastSyncOnBoarding")
-
                 if(stringDateOnBoarding != nil){
                     let dateLastSync = util.StringToDate(dateString: stringDate!)
                     let dateOnBoarding = util.StringToDate(dateString: stringDateOnBoarding!)

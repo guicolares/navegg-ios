@@ -196,6 +196,7 @@ class WebService{
                 }
             }
 
+            
             Alamofire.request(self.getEndPoint(endPoint: "app", param: "app"),
               parameters: parameters,
               headers: self.headers).responseJSON {
@@ -206,7 +207,7 @@ class WebService{
                         let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as! [String:String]
                         usr.saveSegments(segments: jsonData)
                     } catch {
-                        print("catch createUser WebService...")
+                        print("catch getSegments WebService...")
                         Thread.callStackSymbols.forEach{print($0)}
                     }
                     

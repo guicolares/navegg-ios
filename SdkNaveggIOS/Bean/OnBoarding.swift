@@ -32,7 +32,6 @@ class OnBoarding{
         }
     }
     
-   
     public func addInfo(key:String, value:String)->Bool{
         self.valueData = self.defaults.dictionary(forKey: "onBoarding" + String(self.accountId)) ?? [:]
 
