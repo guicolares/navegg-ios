@@ -236,12 +236,21 @@ class Util {
         //2018-02-08 17:40:18
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" //Your date format
         dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00") //Current time zone
-        return dateFormatter.date(from: dateString)! //according to date format your date string
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        if let d = dateFormatter.date(from: dateString) {
+            return d
+        }
+        
+        return StringToDate(dateString: "1970-01-01 00:00:00")
     }
     
     func DateToString(date:Date) -> String{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" //Your New Date format as per requirement change it own
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00") //Current time zone
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
         return dateFormatter.string(from: date) //pass Date here
     }
     
