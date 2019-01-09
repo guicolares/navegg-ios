@@ -29,6 +29,7 @@ public class NaveggApi:NSObject{
         if (self.user.getUserId() == "0") {
             self.user.createUserId()
         }
+        
         super.init()
         registerReceiverAndAccountSdk(cod: accountId)
         
@@ -53,19 +54,11 @@ public class NaveggApi:NSObject{
     }
     
     public func setTrackPage(screen:String){
-        if(!user.hasToSendDataMobileInfo()){
-            self.user.sendDataMobileInfo()
-        }
-        
         user.makeAPageView(screen: screen)
         self.user.sendDataTrack()
     }
     
     public func setCustom(id_custom:Int){
-        if(!user.hasToSendDataMobileInfo()){
-            self.user.sendDataMobileInfo()
-        }
-        
         self.user.setCustom(id_custom: id_custom)
         self.user.sendCustomList()
     }
