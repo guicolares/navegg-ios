@@ -12,7 +12,7 @@ class User {
     var userId : String?
     var accountId : Int
     var util = Util()
-    var defaults  : UserDefaults
+    var defaults : UserDefaults
     let context : AnyObject
     var listPageView = [PageViewer]()
     var listCustom = [Int]()
@@ -20,7 +20,6 @@ class User {
     let ws = WebService()
     var dateLastSync:Date?=nil
     var customListPermanent = [Int]()
-    
     var jsonSegments = [String:String]()
 
     init(accountId : Int, context:AnyObject){
@@ -31,9 +30,16 @@ class User {
         self.userId = self.defaults.string(forKey: "NVGSDK_USERID")
         //self.userId = "0" //DEV
         self.onBoarding = OnBoarding(accountId: self.accountId, util: self.util, defaults: self.defaults)
-        if self.userId == nil || self.userId == "0"{
+        if (self.userId == nil || self.userId == "0") {
             self.createUserId()
         }
+        // send mobile info
+        if (self.userId != nil && self.userId != "0") {
+            if self.checkLastSendMobileInfo() {
+                self.sendDataMobileInfo()
+            }
+        }
+        
         self.loadResourcesFromSharedObject()
     }
     
@@ -139,10 +145,23 @@ class User {
     
     func setToDataMobileInfo(sendMobileinfo : Bool){
         defaults.set(sendMobileinfo, forKey: "sendDataMobileInfo")
+        if sendMobileinfo {
+            defaults.set(util.DateToString(date: Date()), forKey: "dateLastMobileInfoSync")
+        }
     }
-    
-    func hasToSendDataMobileInfo()->Bool{
-        return defaults.bool(forKey: "sendDataMobileInfo") != true ? false : true
+
+    func checkLastSendMobileInfo() -> Bool {
+        let currentDate = Date()
+        let stringDate = defaults.string(forKey: "dateLastMobileInfoSync")
+        if (stringDate != nil) {
+            let dateLastMobileInfoSync = util.StringToDate(dateString: stringDate!)
+            if (util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastMobileInfoSync) >= 15) {
+                return true
+            } else {
+                return false
+            }
+        }
+        return true
     }
     
     /* Track */
