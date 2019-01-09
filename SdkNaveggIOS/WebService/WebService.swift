@@ -9,10 +9,8 @@
 import Foundation
 import Alamofire
 
-class WebService{
-    // HASH COnta 666 = "29a359c0409a86dd64d03"
-    
-    let headers:[String:String] = [
+class WebService {
+    let headers: [String:String] = [
         "User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
         "content-type":"application/octet-stream"]
     let util = Util()
@@ -24,7 +22,7 @@ class WebService{
     let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
     var runningCreateUser:Bool!
     
-    init (){
+    init () {
         self.sessionConfig = Alamofire.SessionManager(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
     }
     
@@ -33,8 +31,7 @@ class WebService{
         return URL[url]!
     }
     
-    func getEndPoint(endPoint:String,param:String)->String{
-        //return "http://local.navdmp.com/\(param)";
+    func getEndPoint(endPoint:String,param:String) -> String {
         return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
     }
     
@@ -49,12 +46,12 @@ class WebService{
         return request
     }
     
-    public func createUser (user:User, acc:Int){
-        if self.runningCreateUser == true{
+    public func createUser(user:User, acc:Int) {
+        if self.runningCreateUser == true {
             return
         }
         self.runningCreateUser = true
-        if(util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             self.sessionConfig.request(
                 self.getEndPoint(endPoint: "app",param: "app"),
                 parameters: ["acc":acc, "devid": util.getDeviceId()],
@@ -66,7 +63,6 @@ class WebService{
                     do {
                         var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
                         let userId = jsonData!["nvgid"] as! String
-                        print("on createUser: \(userId)")
                         let usr = user
                         usr.__set_user_id(userID: userId)
                         self.runningCreateUser = false
@@ -90,19 +86,19 @@ class WebService{
         }
     }
     
-    public func sendDataMobileInfo(user:User, mobileInfo:MobileInfo){
-        if (user.getUserId() == "0"){
+    public func sendDataMobileInfo(user:User, mobileInfo:MobileInfo) {
+        if user.getUserId() == "0" {
             return
         }
         let usr = user
-        if (util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             let usr = user
             var urlRequest = self.getEndPointURLRequest(endPoint: "request",param: "sdkinfo")
 
             let mobInfo = try! mobileInfo.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = mobInfo
             sessionConfig.request(urlRequest).responseString{ response in
-                switch(response.result){
+                switch (response.result) {
                 case .success:
                     usr.setToDataMobileInfo(sendMobileinfo: true)
                 break
@@ -111,23 +107,23 @@ class WebService{
                 break
                 }
             }
-        }else{
+        } else {
            usr.setToDataMobileInfo(sendMobileinfo: false)
         }
     }
     
     public func sendDataTrack(user:User, pageView : [PageViewer]) {
-        if (user.getUserId() == "0"){
+        if user.getUserId() == "0" {
             return
         }
-        if (util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             let pageTrack = util.setDataTrack(user: user, pageView: util.setListDataPageTrack(pageView: pageView))
             let usr = user
             var urlRequest = self.getEndPointURLRequest(endPoint: "request",param: "sdkreq")
             let trackInfo = try! pageTrack.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = trackInfo
             sessionConfig.request(urlRequest).responseString{ (response) in
-                switch(response.result){
+                switch (response.result) {
                     case .success:
                         usr.clearListPageView()
                     break
@@ -140,12 +136,12 @@ class WebService{
         }
     }
     
-    public func sendCustomList(user:User, listCustom:[Int]){
-        if (user.getUserId() == "0"){
+    public func sendCustomList(user:User, listCustom:[Int]) {
+        if user.getUserId() == "0" {
             return
         }
 
-        if (util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             let usr = user
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             for id_custom in listCustom{
@@ -153,7 +149,7 @@ class WebService{
                 self.getEndPoint(endPoint: "request",param: "cus"),
                 parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserId()],
                 headers: self.headers).responseString(queue:queue,completionHandler:{(response) in
-                    switch(response.result){
+                    switch (response.result) {
                         case .success:
                             usr.removeCustom(id_custom: id_custom)
                         break
@@ -168,18 +164,12 @@ class WebService{
         }
     }
     
-    public func getSegments(user:User){
-        if (user.getUserId() == "0"){
+    public func getSegments(user:User) {
+        if user.getUserId() == "0" {
             return
         }
         let usr = user
-        if (util.isConnectedInternet()){
-            /* wst = Want in String
-               wst 0 String 1 in ID
-               v = 11 Tag Navegg Version SDK
-               wct = 1 Want Custom
-             */
-
+        if util.isConnectedInternet() {
             var parameters = Dictionary<String,Any>()
             parameters = [
                 "acc":usr.getAccountId(),
@@ -190,12 +180,11 @@ class WebService{
                 "wct":1
             ] as [String : Any]
 
-            for (key,value) in user.getOnBoarding().__get_hash_map(){
-                if(defineParams.contains(key)){
+            for (key,value) in user.getOnBoarding().__get_hash_map() {
+                if defineParams.contains(key) {
                     parameters.updateValue(value, forKey: key)
                 }
             }
-
             
             Alamofire.request(self.getEndPoint(endPoint: "app", param: "app"),
               parameters: parameters,
@@ -212,28 +201,27 @@ class WebService{
                     }
                     
                     break
-                case .failure: // let error
+                case .failure:
                     print("NavegAPI: warning - getSegments - something went wrong with endpoint, will retry later")
-                    //print("error getSegments - > \n    \(error.localizedDescription) \n")
                     break
                 }
             }
         }
     }
     
-    public func sendOnBoarding(user:User, onBoarding:OnBoarding){
-        if (user.getUserId() == "0"){
+    public func sendOnBoarding(user:User, onBoarding:OnBoarding) {
+        if user.getUserId() == "0" {
             return
         }
         let usr = user
-        if (util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             var parameters = Dictionary<String,Any>()
             parameters = ["prtid":usr.getAccountId(), "id":user.getUserId(), "DATA":[]] as [String : Any]
             var valueData = [String:Any]()
-            for (key,value) in onBoarding.__get_hash_map(){
-                if(defineParams.contains(key)){
+            for (key,value) in onBoarding.__get_hash_map() {
+                if defineParams.contains(key) {
                     parameters.updateValue(value, forKey: key)
-                }else{
+                } else {
                     valueData[key] = value
                 }
             }

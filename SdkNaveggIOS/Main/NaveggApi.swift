@@ -8,16 +8,14 @@
 import Foundation
 import Alamofire
 
-public class NaveggApi:NSObject{
+public class NaveggApi:NSObject {
     private var defaults : UserDefaults
     private let util = Util()
     private var user : User
     private var appDelegate: AnyObject
     let NetworkReachabilityChanged = NSNotification.Name("NetworkReachabilityChanged")
-  
     
-    
-    required public init(accountId:Int, context: AnyObject, idAppStore:Int?=0){
+    required public init(accountId:Int, context: AnyObject, idAppStore:Int?=0) {
         
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(accountId)")!
         self.defaults.set(accountId, forKey: "NVGSDK_CODCONTA")
@@ -26,7 +24,7 @@ public class NaveggApi:NSObject{
         self.appDelegate = context
         LocationPosition.sharedLocation.determineMyCurrentLocation()
         
-        if (self.user.getUserId() == "0") {
+        if self.user.getUserId() == "0" {
             self.user.createUserId()
         }
         
@@ -34,56 +32,51 @@ public class NaveggApi:NSObject{
         registerReceiverAndAccountSdk(cod: accountId)
         
     }
-    
 
-    func registerReceiverAndAccountSdk(cod:Int){
+    func registerReceiverAndAccountSdk(cod:Int) {
         
-        if(!ReachabilityManager.shared.isCreateNotificationCenter()){
+        if !ReachabilityManager.shared.isCreateNotificationCenter() {
             ReachabilityManager.shared.createNotificationCenter(create: true)
             ReachabilityManager.shared.startMonitoring(user: self.user)
             ReachabilityManager.shared.startApplicationDidEnterBackground(user: self.user)
         }
         
-//        var accounts = defaults.array(forKey: "accounts") as? [Int] ?? [Int]()
         var accounts = defaults.array(forKey: "accounts")?.count == 0 ?  [Int]() : defaults.array(forKey: "accounts") as? [Int] ?? [Int]()
-        if(accounts.contains(cod) == false){
+        if accounts.contains(cod) == false {
             accounts.append(cod)
             defaults.set(accounts, forKey: "accounts")
         }
-        
     }
     
-    public func setTrackPage(screen:String){
+    public func setTrackPage(screen:String) {
         user.makeAPageView(screen: screen)
         self.user.sendDataTrack()
     }
     
-    public func setCustom(id_custom:Int){
+    public func setCustom(id_custom:Int) {
         self.user.setCustom(id_custom: id_custom)
         self.user.sendCustomList()
     }
     
-    public func getSegments(segments:String) -> String{
+    public func getSegments(segments:String) -> String {
         do {
             return try self.user.getSegments(segments: segments);
         } catch {
-            return "";
+            return ""
         }
     }
     
-    public func setOnboarding (key:String, value:String){
+    public func setOnboarding (key:String, value:String) {
         if self.user.setOnBoarding(key: key, value: value) {
             self.user.sendOnBoarding()
         }
     }
     
-    public func getOnBoarding(key:String)->String{
+    public func getOnBoarding(key:String) -> String {
         return self.user.getOnBoarding().getInfo(key: key)
     }
     
-    public func getUserId()->String {
+    public func getUserId() -> String {
         return self.user.getUserId()
     }
-    
-    
 }
