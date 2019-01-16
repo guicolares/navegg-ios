@@ -100,15 +100,25 @@ class WebService {
             sessionConfig.request(urlRequest).responseString{ response in
                 switch (response.result) {
                 case .success:
-                    usr.setToDataMobileInfo(sendMobileinfo: true)
-                break
+                    do {
+                        var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
+                        let status = jsonData!["status"] as! Bool
+                        if status {
+                            usr.setToDataMobileInfo(sendMobileinfo: true)
+                        } else {
+                            // status false
+                        }
+                    } catch {
+                        
+                    }
+                   break
                 case .failure:
                     print("NavegAPI: warning - sendDataMobileInfo - something went wrong with endpoint, will retry later")
                 break
                 }
             }
         } else {
-           usr.setToDataMobileInfo(sendMobileinfo: false)
+            usr.setToDataMobileInfo(sendMobileinfo: false)
         }
     }
     
@@ -239,10 +249,13 @@ class WebService {
                     usr.getOnBoarding().setDateLastSync(date: Date())
                 break
                 case .failure:
+                    usr.getOnBoarding().__set_to_send_onBoarding(status: false)
                     print("NavegAPI: warning - sendOnBoarding - something went wrong with endpoint, will retry later")
                 break
                 }
             }
+        } else {
+            usr.getOnBoarding().__set_to_send_onBoarding(status: false)
         }
     }
 }
