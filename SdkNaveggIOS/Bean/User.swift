@@ -28,14 +28,14 @@ class User {
         self.context = context
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!
         self.userId = self.defaults.string(forKey: "NVGSDK_USERID")
-        //self.userId = "0" //DEV
+
         self.onBoarding = OnBoarding(accountId: self.accountId, util: self.util, defaults: self.defaults)
         if self.userId == nil || self.userId == "0" {
             self.createUserId()
         }
         // send mobile info
         if self.userId != nil && self.userId != "0" {
-            if self.checkLastSendMobileInfo() {
+            if self.needToSendMobileInfo() {
                 self.sendDataMobileInfo()
             }
         }
@@ -144,24 +144,11 @@ class User {
     }
     
     func setToDataMobileInfo(sendMobileinfo : Bool) {
-        defaults.set(sendMobileinfo, forKey: "sendDataMobileInfo")
-        if sendMobileinfo {
-            defaults.set(util.DateToString(date: Date()), forKey: "dateLastMobileInfoSync")
-        }
+        defaults.set(sendMobileinfo, forKey: "sentMobileInfo")
     }
 
-    func checkLastSendMobileInfo() -> Bool {
-        let currentDate = Date()
-        let stringDate = defaults.string(forKey: "dateLastMobileInfoSync")
-        if stringDate != nil {
-            let dateLastMobileInfoSync = util.StringToDate(dateString: stringDate!)
-            if util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastMobileInfoSync) >= 15 {
-                return true
-            } else {
-                return false
-            }
-        }
-        return true
+    func needToSendMobileInfo() -> Bool {
+        return defaults.bool(forKey:"sentMobileInfo") == true ? false : true
     }
     
     /* Track */
