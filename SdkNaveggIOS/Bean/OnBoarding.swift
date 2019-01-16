@@ -40,7 +40,7 @@ class OnBoarding {
                 let stringDate = defaults.string(forKey: "dateLastSyncOnBoarding")
                 if stringDate != nil {
                     let dateLastSync = util.StringToDate(dateString: stringDate!)
-                    if(util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync) == 0){
+                    if util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync) == 0 {
                         return false
                     }
                 }
@@ -65,7 +65,7 @@ class OnBoarding {
     public func getInfo(key:String) -> String {
         var info = ""
         let value = self.valueData.index(forKey: key)
-        if(value != nil){
+        if value != nil {
             info = valueData[value!].value as! String
         }
         return info
