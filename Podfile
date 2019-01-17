@@ -6,10 +6,14 @@ target 'SdkNaveggIOS' do
   use_frameworks!
 
   # Pods for SdkNaveggIOS
+    pod 'ReachabilitySwift'
+    pod 'SwiftProtobuf', '~> 1.2.0'
+    pod 'Alamofire', '~> 4.7.3'
 
-  target 'SdkNaveggIOSTests' do
-    inherit! :search_paths
+
+    # target 'SdkNaveggIOSTests' do
+    #    inherit! :search_paths
     # Pods for testing
-  end
+    # end
 
 end

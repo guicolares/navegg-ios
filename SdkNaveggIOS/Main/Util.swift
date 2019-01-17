@@ -11,10 +11,11 @@ import Reachability
 import UIKit
 import WebKit
 import Alamofire
+import AdSupport
 
 class Util {
     
-    func getIpMobile() -> String{
+    func getIpMobile() -> String {
         var address : String!
         
         // Get list of all interfaces on the local machine:
@@ -48,13 +49,12 @@ class Util {
         return address
     }
     
-//    func getTypeConnection() -> String {
-//
-//    }
-
-
-    func getDeviceId()->String{
-        return UIDevice.current.identifierForVendor?.uuidString as String!
+    func getDeviceId() -> String {
+        var strIDFA = "0"
+        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
+            strIDFA = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        }
+        return strIDFA
     }
     
     func getTypeCategory() -> String {
@@ -98,33 +98,21 @@ class Util {
 
         if navigationItem.title == "" {
             title = "Sem titulo"
-        }else {
+        } else {
             title = navigationItem.title
         }
         return title
     }
     
-    public func getIOSModel() -> String{
-        
+    public func getIOSModel() -> String {
         return UIDevice.init().localizedModel
-        
     }
 
-    public func getIOSName() -> String{
-        
+    public func getIOSName() -> String {
         return UIDevice.current.systemName
-        
     }
     
-    public func getIOSVersionOS() -> Int32{
-        
-//        let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
-//        let indexOf1 = segments[segments.index(segments.startIndex,offsetBy: segments.distance(from: segments.startIndex  , to: cut1) )...]
-//
-//        let indexOf2 = indexOf1[...indexOf1.index(indexOf1.endIndex,offsetBy: -4)]
-//
-//        let seg = indexOf2.split(separator: ":", omittingEmptySubsequences: false)
-        
+    public func getIOSVersionOS() -> Int32 {
         let version = UIDevice.current.systemVersion
         var index8:Character=" "
         var v:String = ""
@@ -145,28 +133,28 @@ class Util {
         
     }
     
-    public func getVersionApp() -> String{
+    public func getVersionApp() -> String {
         var versionApp = ""
         versionApp = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
 
         return versionApp
     }
     
-    public func getVersionLib() -> String{
+    public func getVersionLib() -> String {
         var versionLib = ""
         versionLib = Bundle(for: NaveggApi.self).infoDictionary?["CFBundleShortVersionString"] as! String
         
         return versionLib
     }
     
-    public func getVersionCodeLib() -> String{
+    public func getVersionCodeLib() -> String {
         var versionCodeLib = ""
         versionCodeLib = Bundle(for: NaveggApi.self).infoDictionary?["CFBundleVersion"] as! String
         
         return versionCodeLib
     }
     
-    public func getUserAgent() -> String{
+    public func getUserAgent() -> String {
         return (UIWebView().stringByEvaluatingJavaScript(from: "navigator.userAgent"))!
     }
     
@@ -174,20 +162,15 @@ class Util {
         return Locale.preferredLanguages[0]
     }
     
-    
     public func isConnectedInternet() -> Bool {
         return NetworkReachabilityManager()!.isReachable
     }
     
-    func getTodayString() -> Int64{
+    func getTodayString() -> Int64 {
         
         let dateFormatter : DateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let date = Date()
-//        let dateString = dateFormatter.string(from: date)
-//        let interval = date.timeIntervalSince1970
-
-
     
         return Int64(((date.timeIntervalSince1970) * 1000.0).rounded())
     }
@@ -196,7 +179,7 @@ class Util {
         
         var trackProto = Track()
         trackProto.acc = user.getAccountId()
-        trackProto.userID = "12d450cac700b4f1f7491806"
+        trackProto.userID = user.getUserId()
         trackProto.nameApp = getNameApp()
         trackProto.deviceIp = getIpMobile()
         trackProto.typeConnection = ReachabilityManager.shared.getTypeConnection()
@@ -205,7 +188,7 @@ class Util {
         return trackProto
     }
     
-    func setListDataPageTrack(pageView : [PageViewer]) -> [PageView]{
+    func setListDataPageTrack(pageView : [PageViewer]) -> [PageView] {
         
         var listPageView = [PageView]()
         
@@ -223,4 +206,37 @@ class Util {
     }
     
     
+    func StringToDate(dateString : String) -> Date {
+        let dateFormatter = DateFormatter()
+
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        if let d = dateFormatter.date(from: dateString) {
+            return d
+        }
+        
+        return StringToDate(dateString: "1970-01-01 00:00:00")
+    }
+    
+    func DateToString(date:Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        return dateFormatter.string(from: date)
+    }
+    
+    func dayBetweenDates(firstDate:Date, secondDate:Date) -> Int {
+        let calendar = NSCalendar.current
+        
+        let date1 = calendar.startOfDay(for: firstDate)
+        let date2 = calendar.startOfDay(for: secondDate)
+        
+        let components = calendar.dateComponents([.day], from: date1, to: date2)
+        
+        return components.day!
+    }
 }

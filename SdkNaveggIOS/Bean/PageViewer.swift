@@ -13,6 +13,4 @@ struct PageViewer : Encodable, Decodable {
     var dateTime : Int64
     var titlePage : String
     var callPage : String
-
-    
 }

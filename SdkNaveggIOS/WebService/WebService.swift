@@ -9,33 +9,35 @@
 import Foundation
 import Alamofire
 
-
-class WebService{
-    let headers:[String:String] = ["User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36", "content-type":"application/octet-stream"]
+class WebService {
+    let headers: [String:String] = [
+        "User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
+        "content-type":"application/octet-stream"]
     let util = Util()
     let options : Data.Base64EncodingOptions = [
         .endLineWithLineFeed,
         .endLineWithCarriageReturn
     ]
-    let sessionConfig:SessionManager
+    var sessionConfig:SessionManager
+    let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
+    var runningCreateUser:Bool!
     
-    init (){
-        let configuration = URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS")
-        sessionConfig = Alamofire.SessionManager(configuration: configuration)
+    init () {
+        self.sessionConfig = Alamofire.SessionManager(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
     }
     
     func ENDPOINTS(url : String) -> String {
-        var URL : [String:String] = ["user":"usr","request":"cdn","onboarding":"cd"]
+        var URL : [String:String] = ["app":"app","request":"cdn","onboarding":"cd"]
         return URL[url]!
     }
     
-    func getEndPoint(endPoint:String,param:String)->String{
+    func getEndPoint(endPoint:String,param:String) -> String {
         return "https://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)";
     }
     
     func getEndPointURLRequest(endPoint:String,param:String) -> URLRequest {
         
-        var request = URLRequest(url: URL(string: "http://"+ENDPOINTS(url: endPoint)+".navdmp.com/\(param)")!)
+        var request = URLRequest(url: URL(string: self.getEndPoint(endPoint: endPoint, param: param))!)
         request.httpMethod = HTTPMethod.post.rawValue
         request.setValue("application/protobuf", forHTTPHeaderField: "Content-Type")
         request.setValue("application/protobuf", forHTTPHeaderField: "Accept")
@@ -44,130 +46,216 @@ class WebService{
         return request
     }
     
-    public func createUser (user: User, acc:Int) {
-        if(util.isConnectedInternet()){
-            var usr = user
-            sessionConfig.request(self.getEndPoint(endPoint: "user",param: "usr"),
-                              parameters: ["acc":acc, "devid": util.getDeviceId()],
-                              headers: self.headers).response{ (response) in
-                do {
-                    if let responseData =  String(data: response.data!, encoding: String.Encoding.utf8)?.replacingOccurrences(of: "\'", with: "\"").data(using: String.Encoding.utf8)
-                    {
-                        var jsonData = try JSONSerialization.jsonObject(with: responseData, options: .allowFragments) as? [String:Any]
-                        usr.__set_user_id(userID:jsonData!["nvgid"]! as! String)
+    public func createUser(user:User, acc:Int) {
+        if self.runningCreateUser == true {
+            return
+        }
+        self.runningCreateUser = true
+        if util.isConnectedInternet() {
+            self.sessionConfig.request(
+                self.getEndPoint(endPoint: "app",param: "app"),
+                parameters: ["acc":acc, "devid": util.getDeviceId()],
+                headers: self.headers
+            ).validate().responseJSON {
+                response in
+                switch (response.result) {
+                case .success:
+                    do {
+                        var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
+                        let userId = jsonData!["nvgid"] as! String
+                        let usr = user
+                        usr.__set_user_id(userID: userId)
+                        self.runningCreateUser = false
                         usr.setToDataMobileInfo(sendMobileinfo: true);
-                        self.sendDataMobileInfo(user: usr, mobileInfo: try usr.getDataMobileInfo())
+                        usr.sendDataMobileInfo()
                         self.getSegments(user: usr)
-                        print("create user")
+
+                    } catch {
+                        self.runningCreateUser = false
+                        print("catch createUser WebService...")
+                        Thread.callStackSymbols.forEach{print($0)}
                     }
-                } catch {
-                    
+                
+                break
+                case .failure:
+                    self.runningCreateUser = false
+                    print("NavegAPI: warning - createUserId - something went wrong with endpoint, will retry later")
+                break
                 }
             }
         }
     }
     
-    public func sendDataMobileInfo(user:User, mobileInfo:MobileInfo){
-        if (user.getUserID() == "0"){
+    public func sendDataMobileInfo(user:User, mobileInfo:MobileInfo) {
+        if user.getUserId() == "0" {
             return
         }
         let usr = user
-        if (util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             let usr = user
             var urlRequest = self.getEndPointURLRequest(endPoint: "request",param: "sdkinfo")
 
             let mobInfo = try! mobileInfo.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = mobInfo
-            sessionConfig.request(urlRequest).responseString{ (response) in
-                usr.setToDataMobileInfo(sendMobileinfo: true)
-                print("sendDataMobileInfo")
+            sessionConfig.request(urlRequest).responseString{ response in
+                switch (response.result) {
+                case .success:
+                    do {
+                        var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
+                        let status = jsonData!["status"] as! Bool
+                        if status {
+                            usr.setToDataMobileInfo(sendMobileinfo: true)
+                        } else {
+                            // status false
+                        }
+                    } catch {
+                        
+                    }
+                   break
+                case .failure:
+                    print("NavegAPI: warning - sendDataMobileInfo - something went wrong with endpoint, will retry later")
+                break
+                }
             }
-        }else{
-           usr.setToDataMobileInfo(sendMobileinfo: false)
+        } else {
+            usr.setToDataMobileInfo(sendMobileinfo: false)
         }
     }
     
     public func sendDataTrack(user:User, pageView : [PageViewer]) {
-        if (user.getUserID() == "0"){
+        if user.getUserId() == "0" {
             return
         }
-        if (util.isConnectedInternet()){
+        if util.isConnectedInternet() {
             let pageTrack = util.setDataTrack(user: user, pageView: util.setListDataPageTrack(pageView: pageView))
-            var usr = user
+            let usr = user
             var urlRequest = self.getEndPointURLRequest(endPoint: "request",param: "sdkreq")
             let trackInfo = try! pageTrack.serializedData().base64EncodedString(options: options).data(using: String.Encoding.utf8)
             urlRequest.httpBody = trackInfo
             sessionConfig.request(urlRequest).responseString{ (response) in
-                usr.clearListPageView()
-                print("sendDataTrack")
+                switch (response.result) {
+                    case .success:
+                        usr.clearListPageView()
+                    break
+                case .failure:
+                        print("NavegAPI: warning - sendDataMobileInfo - something went wrong with endpoint, will retry later")
+                    
+                break
+                }
             }
         }
-        
     }
     
-    public func sendCustomList(user:User, listCustom:[Int]){
-        if (user.getUserID() == "0"){
+    public func sendCustomList(user:User, listCustom:[Int]) {
+        if user.getUserId() == "0" {
             return
         }
 
-        if (util.isConnectedInternet()){
-            var usr = user
+        if util.isConnectedInternet() {
+            let usr = user
             let queue = DispatchQueue(label: "com.cnoon.response-queue", qos: .utility, attributes: [.concurrent])
             for id_custom in listCustom{
-            sessionConfig.request(self.getEndPoint(endPoint: "request",param: "cus"),
-                  parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserID()],
-                  headers: self.headers).response(queue:queue,completionHandler:{(response) in
-                        usr.removeCustom(id_custom: id_custom)
-                            print("sendCustomList")
-                        }
-                )
-            }
-        }else{
-            
-        }
-        
-    }
-    
-    public func getSegments(user:User){
-        if (user.getUserID() == "0"){
-            return
-        }
-        var usr = user
-        if (util.isConnectedInternet()){
-            /* wst = Want in String
-               wst 0 String 1 in ID
-               v = 10 Tag Navegg Version
-             */
-            Alamofire.request(self.getEndPoint(endPoint: "user",param: "usr"),
-                      parameters: ["acc":usr.getAccountId(), "wst": 0,"v":10, "id":user.getUserID(), "asdk":util.getVersionLib()],
-                      headers: self.headers).responseString{ (response) in
-                        usr.saveSegments(segments: response.result.value!)
-                         print("getSegments")
+            sessionConfig.request(
+                self.getEndPoint(endPoint: "request",param: "cus"),
+                parameters: ["acc":usr.getAccountId(), "cus": id_custom,"id":user.getUserId()],
+                headers: self.headers).responseString(queue:queue,completionHandler:{(response) in
+                    switch (response.result) {
+                        case .success:
+                            usr.removeCustom(id_custom: id_custom)
+                        break
+                    case .failure:
+                            print("NavegAPI: warning - sendCustomList - something went wrong with endpoint, will retry later")
+                        
+                    break
+                    }
+                }
+            )
             }
         }
     }
     
-    public func sendOnBoarding(user:User, onBoarding:OnBoarding){
-        if (user.getUserID() == "0"){
+    public func getSegments(user:User) {
+        if user.getUserId() == "0" {
             return
         }
         let usr = user
-        if (util.isConnectedInternet()){
-            var parameters = ["prtid":usr.getAccountId(), "id":user.getUserID()] as [String : Any]
-            for (key,value) in onBoarding.__get_hash_map(){
-                parameters.updateValue(value, forKey: key)
+        if util.isConnectedInternet() {
+            var parameters = Dictionary<String,Any>()
+            parameters = [
+                "acc":usr.getAccountId(),
+                "wst": 0,
+                "v":11,
+                "id":user.getUserId(), 
+                "asdk":util.getVersionLib(),
+                "wct":1
+            ] as [String : Any]
+
+            for (key,value) in user.getOnBoarding().__get_hash_map() {
+                if defineParams.contains(key) {
+                    parameters.updateValue(value, forKey: key)
+                }
             }
-//
-//            var urlRequest = self.getEndPointURLRequest(endPoint: "onboarding",param: "cd")
-//            let jsonData = try! JSONSerialization.data(withJSONObject: parameters, options: [])
-//            urlRequest.httpBody = try! JSONSerialization.data(withJSONObject: jsonData)
-            sessionConfig.request(self.getEndPoint(endPoint: "onboarding",param: "cd"),parameters:parameters,headers: self.headers).responseString{ (response) in
-                user.getOnBoarding().__set_to_send_onBoarding(status: true)
-                print("sendOnBoarding")
+            
+            Alamofire.request(self.getEndPoint(endPoint: "app", param: "app"),
+              parameters: parameters,
+              headers: self.headers).responseJSON {
+                response in
+                switch (response.result) {
+                case .success:
+                    do {
+                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as! [String:String]
+                        usr.saveSegments(segments: jsonData)
+                    } catch {
+                        print("catch getSegments WebService...")
+                        Thread.callStackSymbols.forEach{print($0)}
+                    }
+                    
+                    break
+                case .failure:
+                    print("NavegAPI: warning - getSegments - something went wrong with endpoint, will retry later")
+                    break
+                }
             }
         }
     }
     
-    
-    
+    public func sendOnBoarding(user:User, onBoarding:OnBoarding) {
+        if user.getUserId() == "0" {
+            return
+        }
+        let usr = user
+        if util.isConnectedInternet() {
+            var parameters = Dictionary<String,Any>()
+            parameters = ["prtid":usr.getAccountId(), "id":user.getUserId(), "DATA":[]] as [String : Any]
+            var valueData = [String:Any]()
+            for (key,value) in onBoarding.__get_hash_map() {
+                if defineParams.contains(key) {
+                    parameters.updateValue(value, forKey: key)
+                } else {
+                    valueData[key] = value
+                }
+            }
+            
+            parameters["DATA"] = valueData
+
+            sessionConfig.request(
+                self.getEndPoint(endPoint: "onboarding",param: "cd"),
+                parameters:parameters,
+                headers: self.headers
+            ).responseString{ (response) in
+                switch(response.result){
+                case .success:
+                    usr.getOnBoarding().__set_to_send_onBoarding(status: true)
+                    usr.getOnBoarding().setDateLastSync(date: Date())
+                break
+                case .failure:
+                    usr.getOnBoarding().__set_to_send_onBoarding(status: false)
+                    print("NavegAPI: warning - sendOnBoarding - something went wrong with endpoint, will retry later")
+                break
+                }
+            }
+        } else {
+            usr.getOnBoarding().__set_to_send_onBoarding(status: false)
+        }
+    }
 }

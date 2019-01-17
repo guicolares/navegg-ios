@@ -1,0 +1,24 @@
+PODS:
+  - Alamofire (4.7.3)
+  - ReachabilitySwift (4.3.0)
+  - SwiftProtobuf (1.2.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7.3)
+  - ReachabilitySwift
+  - SwiftProtobuf (~> 1.2.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - ReachabilitySwift
+    - SwiftProtobuf
+
+SPEC CHECKSUMS:
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
+  SwiftProtobuf: 91a9856079044ef4ec762b2344c763cd9e5a73c1
+
+PODFILE CHECKSUM: 031919983bb0a0a458461464da1d1355bf541dc5
+
+COCOAPODS: 1.5.3

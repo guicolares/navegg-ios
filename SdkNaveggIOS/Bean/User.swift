@@ -8,81 +8,105 @@
 
 import Foundation
 
-struct User {
+class User {
     var userId : String?
-    var accountId : Int?
+    var accountId : Int
     var util = Util()
-    private let defaults : UserDefaults
+    var defaults : UserDefaults
     let context : AnyObject
     var listPageView = [PageViewer]()
     var listCustom = [Int]()
-    var valueData = [String:Any]()
-    let listSegments:[String] = [
-    "gender", "age", "education", "marital",
-    "income", "city", "region", "country",
-    "connection", "brand", "product",
-    "interest", "career", "cluster",
-    "", "custom", "industry", "everybuyer" //empty one was prolook
-    ];
-    var onBoarding:OnBoarding?
-    var ws = WebService()
+    var onBoarding:OnBoarding
+    let ws = WebService()
+    var dateLastSync:Date?=nil
+    var customListPermanent = [Int]()
+    var jsonSegments = [String:String]()
 
-    init(accountId : Int? = 0, context:AnyObject){
+    init(accountId : Int, context:AnyObject) {
         
         self.accountId = accountId
         self.context = context
         self.defaults = UserDefaults.init(suiteName:"NVGSDK\(String(describing: accountId))")!
-        self.userId = defaults.string(forKey: "NVGSDK_USERID")
+        self.userId = self.defaults.string(forKey: "NVGSDK_USERID")
+
+        self.onBoarding = OnBoarding(accountId: self.accountId, util: self.util, defaults: self.defaults)
+        if self.userId == nil || self.userId == "0" {
+            self.createUserId()
+        }
+        // send mobile info
+        if self.userId != nil && self.userId != "0" {
+            if self.needToSendMobileInfo() {
+                self.sendDataMobileInfo()
+            }
+        }
+        
         self.loadResourcesFromSharedObject()
-        
-        
     }
     
-    private mutating func loadResourcesFromSharedObject(){
+    func createUserId() {
+        self.ws.createUser(user:self, acc:self.accountId)
+    }
+    
+    func sendDataMobileInfo() {
+        self.ws.sendDataMobileInfo(user: self, mobileInfo: try! self.getDataMobileInfo())
+    }
+    
+    func sendDataTrack() {
+        self.ws.sendDataTrack(user: self, pageView: self.getPageView())
+    }
+    
+    func sendCustomList() {
+        self.ws.sendCustomList(user: self, listCustom: self.getCustomList())
+    }
+    
+    func sendOnBoarding() {
+        self.ws.sendOnBoarding(user: self, onBoarding: self.getOnBoarding())
+    }
+    
+    private func loadResourcesFromSharedObject() {
         /* Page View */
-        if(defaults.object(forKey: "listAppPageView") != nil){
+        if self.defaults.object(forKey: "listAppPageView") != nil {
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
-            if(jsonSerData != nil){
+            if jsonSerData != nil {
                 self.listPageView = try! JSONDecoder().decode([PageViewer].self, from: jsonSerData!)
-                if(self.listPageView.count == 0){
+                if self.listPageView.count == 0 {
                     self.listPageView = [PageViewer]()
                 }
             }
-            
-        }else{
+        } else {
             self.listPageView = [PageViewer]()
         }
             /* Custom List */
-        if(defaults.object(forKey: "customList") != nil){
+        if defaults.object(forKey: "customList") != nil {
             let jsonCustomData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "customList") as! Data)!)
-            if(jsonCustomData != nil){
+            if jsonCustomData != nil {
                 self.listCustom = try! JSONDecoder().decode([Int].self, from: jsonCustomData!)
-                if(self.listCustom.count == 0){
+                if self.listCustom.count == 0 {
                     self.listCustom = [Int]()
                 }
             }
-        }else{
+        } else {
             self.listCustom = [Int]()
         }
         
-        if(self.defaults.dictionary(forKey: "onBoarding") != nil){
-            self.valueData = self.defaults.dictionary(forKey: "onBoarding")!
-            if(self.valueData.count == 0){
-                self.onBoarding = OnBoarding(defaults: defaults)
-            }
+        if self.defaults.dictionary(forKey: "jsonSegments") != nil {
+            self.jsonSegments = self.defaults.dictionary(forKey: "jsonSegments") as! [String:String]
         }
-        self.onBoarding = OnBoarding(defaults: defaults)
         
-        
+        if defaults.array(forKey: "customListAux") != nil {
+            self.customListPermanent = defaults.array(forKey: "customListAux") as! [Int]
+        }
     }
     
-    mutating func __set_user_id(userID :String){
+    func __set_user_id(userID :String?) {
+        
         self.userId = userID
-        defaults.set(userID, forKey: "NVGSDK_USERID")
+        self.defaults.set(self.userId, forKey: "NVGSDK_USERID")
+        self.defaults.synchronize()
     }
     
     /* MobileInfo */
-    func getDataMobileInfo() throws ->MobileInfo{
+    func getDataMobileInfo() throws -> MobileInfo {
         var mobInfo = MobileInfo()
         mobInfo.deviceID = util.getDeviceId() // Device ID e IMEI são os mesmos
         mobInfo.platform = "IOS"
@@ -102,37 +126,33 @@ struct User {
         mobInfo.imei = util.getDeviceId() // IOS não permite pegar o imei, e recomenda usar o Device ID como IMEI
         mobInfo.softwareVersion = ""
         mobInfo.languageApp = util.getLanguageApp()
-//        mobInfo.userID = getUserID()
-        mobInfo.userID = "12d450cac700b4f1f7491806"
+        mobInfo.userID = self.getUserId()
         mobInfo.acc = getAccountId()
         
         return mobInfo
     }
     
-    func getUserID()->String{
-        if self.userId == nil || self.userId == "0"{
+    public func getUserId() -> String {
+        if self.userId == nil || self.userId == "0" {
             return "0"
         }
         return self.userId!
     }
     
-    func getAccountId()->UInt32{
-        if self.accountId == nil || self.accountId == 0{
-            return 0
-        }
-        return UInt32(self.accountId!)
+    func getAccountId() -> UInt32 {
+        return UInt32(self.accountId)
     }
     
-    func setToDataMobileInfo(sendMobileinfo : Bool){
-        defaults.set(sendMobileinfo, forKey: "sendDataMobileInfo")
+    func setToDataMobileInfo(sendMobileinfo : Bool) {
+        defaults.set(sendMobileinfo, forKey: "sentMobileInfo")
     }
-    
-    func hasToSendDataMobileInfo()->Bool{
-        return defaults.bool(forKey: "sendDataMobileInfo") != true ? false : true
+
+    func needToSendMobileInfo() -> Bool {
+        return defaults.bool(forKey:"sentMobileInfo") == true ? false : true
     }
     
     /* Track */
-    mutating func makeAPageView(screen:String){
+    func makeAPageView(screen:String) {
         
         let pageView = PageViewer(
             view: screen,
@@ -146,43 +166,42 @@ struct User {
         let JsonDataSerialied = try! JSONSerialization.jsonObject(with: try! JSONEncoder().encode(listPageView), options: .allowFragments)
         defaults.set(NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "listAppPageView")
         defaults.synchronize()
-        
     }
     
-    
-    
-    mutating func getPageView()->[PageViewer]{
+    func getPageView() -> [PageViewer] {
 
-        if(defaults.object(forKey: "listAppPageView") != nil){
+        if defaults.object(forKey: "listAppPageView") != nil {
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "listAppPageView") as! Data)!)
             listPageView = try! JSONDecoder().decode([PageViewer].self, from: jsonSerData!)
         }
         return listPageView
     }
     
-    mutating func clearListPageView(){
+    func clearListPageView() {
         defaults.removeObject(forKey: "listAppPageView")
         listPageView.removeAll()
     }
     
     /* Custom */
-    mutating func setCustom(id_custom:Int){
+    func setCustom(id_custom:Int) {
         self.listCustom.append(id_custom)
         
+        self.setCustomInPositionSegment(custom: id_custom)
+        
         let JsonDataSerialied = try! JSONSerialization.jsonObject(with: try! JSONEncoder().encode(self.listCustom), options: .allowFragments)
-        defaults.set( NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "customList")
+        defaults.set(NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "customList")
         defaults.synchronize()
     }
     
-    mutating func getCustomList() -> [Int]{
-        if(defaults.object(forKey: "customList") != nil){
+    func getCustomList() -> [Int] {
+        if defaults.object(forKey: "customList") != nil {
             let jsonSerData = try? JSONSerialization.data(withJSONObject: NSKeyedUnarchiver.unarchiveObject(with: defaults.object(forKey: "customList") as! Data)!)
             listCustom = try! JSONDecoder().decode([Int].self, from: jsonSerData!)
         }
         return listCustom
     }
     
-    mutating func removeCustom(id_custom:Int){
+    func removeCustom(id_custom:Int) {
         if let index = self.listCustom.index(of: id_custom) {
             self.listCustom.remove(at: index)
         }
@@ -190,73 +209,94 @@ struct User {
             let JsonDataSerialied = try! JSONSerialization.jsonObject(with: try! JSONEncoder().encode(self.listCustom), options: .allowFragments)
             defaults.set( NSKeyedArchiver.archivedData(withRootObject: JsonDataSerialied), forKey: "customList")
             defaults.synchronize()
-        }else{
+        } else {
             defaults.removeObject(forKey: "customList")
         }
     }
     
-    
     /* Segments */
-    mutating func getSegments(segments:String)->String{
+    func getSegments(segments:String) throws -> String {
         var idSegments:String = ""
-        
-        let jsonSegments = defaults.dictionary(forKey: "jsonSegments")
-        if((jsonSegments?.count) != nil){
-            let segment = jsonSegments?.index(forKey: segments)
-            if(segment != nil){
-                idSegments = jsonSegments![segment!].value as! String
+        let currentDate = Date()
+        let stringDate = defaults.string(forKey: "dateLastSync")
+        distintcCustomSegment()
+        if stringDate != nil {
+            self.dateLastSync = util.StringToDate(dateString: stringDate!)
+            if util.dayBetweenDates(firstDate: currentDate, secondDate: dateLastSync!) >= 1 {
+                ws.getSegments(user: self)
+            } else {
+                let stringDateOnBoarding = defaults.string(forKey: "dateLastSyncOnBoarding")
+                if stringDateOnBoarding != nil {
+                    let dateLastSync = util.StringToDate(dateString: stringDate!)
+                    let dateOnBoarding = util.StringToDate(dateString: stringDateOnBoarding!)
+                    if(dateLastSync < dateOnBoarding){
+                        ws.getSegments(user: self)
+                    }
+                }
             }
+        } else {
+            ws.getSegments(user: self)
         }
+        
+        if self.jsonSegments[segments] != nil {
+            idSegments = self.jsonSegments[segments]!
+        }
+        
         return idSegments
-        
     }
     
-    mutating func saveSegments(segments:String){
-
-        let cut1 = segments.index(after:segments.index(after:segments.index(after: segments.index(of: ",")!)))
-        let indexOf1 = segments[segments.index(segments.startIndex,offsetBy: segments.distance(from: segments.startIndex  , to: cut1) )...]
-        
-        let indexOf2 = indexOf1[...indexOf1.index(indexOf1.endIndex,offsetBy: -4)]
-        
-        let seg = indexOf2.split(separator: ":", omittingEmptySubsequences: false)
-        let jsonObject : NSMutableDictionary = NSMutableDictionary()
-        for (index,segment) in listSegments.enumerated(){
-            if(seg[index].count>0){
-                jsonObject.setValue(String(describing: seg[index]), forKey: segment)
-            }
+    func setCustomInPositionSegment(custom:Int) {
+        if !self.customListPermanent.contains(custom) {
+                self.customListPermanent.append(custom)
+                defaults.setValue(self.customListPermanent , forKey: "customListAux")
+                defaults.synchronize()
         }
-        
-        defaults.setValue(jsonObject, forKey: "jsonSegments")
     }
-    
+
+    func saveSegments(segments:[String:String]) {
+        self.jsonSegments = segments
+        self.defaults.setValue(segments, forKey: "jsonSegments")
+        self.defaults.setValue(util.DateToString(date: Date()), forKey: "dateLastSync")
+    }
     
     /* OnBoarding */
-    func setOnBoarding(key:String, value:String){
-        self.onBoarding?.addInfo(key: key, value: value)
+    func setOnBoarding(key:String, value:String) -> Bool {
+        return self.onBoarding.addInfo(key: key, value: value)
     }
     
-    func getOnBoarding()->OnBoarding{
-        return self.onBoarding!
+    func getOnBoarding() -> OnBoarding {
+        return self.onBoarding
     }
-    
-    
-
     
     /* Send Data when user lay app in background or close app and after open the app */
-    mutating func sendDataSaveInDefault(){
-        ws = WebService()
-        if(util.isConnectedInternet()){
-            if(getPageView().count > 0 ){
-                ws.sendDataTrack(user: self, pageView: getPageView())
+    func sendDataSaveInDefault() {
+        if util.isConnectedInternet() {
+            if getPageView().count > 0 {
+                self.ws.sendDataTrack(user: self, pageView: getPageView())
             }
-            if(getCustomList().count > 0){
-                ws.sendCustomList(user: self, listCustom: getCustomList())
+            if getCustomList().count > 0 {
+                self.ws.sendCustomList(user: self, listCustom: getCustomList())
             }
-            if(!getOnBoarding().hasToSendOnBoarding()){
-                ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
+            if !getOnBoarding().hasToSendOnBoarding() {
+                self.ws.sendOnBoarding(user: self, onBoarding: getOnBoarding())
+            }
+        }
+    }
+    
+    func distintcCustomSegment() {
+        
+        var customs:[String] = [String]()
+        
+        if self.jsonSegments["custom"] != nil {
+            customs = (self.jsonSegments["custom"]!).components(separatedBy: "-")
+        }
+        
+        for value in customListPermanent {
+            if !customs.contains(where:{$0 == "\(value)"}) { // if not in custom segments
+                customs.append("\(value)")
             }
         }
         
+        self.jsonSegments["custom"] = customs.joined(separator: "-")
     }
-    
 }

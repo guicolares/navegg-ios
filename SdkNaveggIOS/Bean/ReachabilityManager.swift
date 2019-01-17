@@ -16,6 +16,7 @@ class ReachabilityManager {
     let NetworkReachabilityChanged = NSNotification.Name("NetworkReachabilityChanged")
     var user:User?
     var defaults:UserDefaults?
+    
     // 5. Reachability instance for Network status monitoring
     let reachability = Reachability()!
     
@@ -33,7 +34,7 @@ class ReachabilityManager {
         do {
             try reachability.startNotifier()
         } catch {
-//            print("Unable to start notifier")
+
         }
         return type
     }
@@ -41,50 +42,38 @@ class ReachabilityManager {
     @objc
     private func reachabilityChanged(_ note: Notification) {
         
-//        print("reachabilityChanged ")
-//        let reachability = note.object as! Reachability
-//
-//        switch reachability.connection {
-//        case .wifi:
-//            print("reachabilityChanged Reachable via WiFi")
-//        case .cellular:
-//            print("reachabilityChanged Reachable via Cellular")
-//        case .none:
-//            print("reachabilityChanged Network not reachable")
-//        }
-    
         DispatchQueue.main.async {
-                self.reachability.whenReachable = { reachability in
+            self.reachability.whenReachable = { reachability in
                     
-                        if reachability.connection == .wifi {
-                            self.user?.sendDataSaveInDefault()
-                        } else {
-                            // $G
-                        }
-                    }
-                self.reachability.whenUnreachable = { _ in
-                    DispatchQueue.main.async {
-                        //Sem conexao
-                    }
+                if reachability.connection == .wifi {
+                    self.user?.sendDataSaveInDefault()
+                } else {
+
                 }
+            }
+            self.reachability.whenUnreachable = { _ in
+                DispatchQueue.main.async {
+                    //Sem conexao
+                }
+            }
         }
-        
-        
     }
     
-    
     @objc
-    private func backGroundReachabilityChanged(_ note: Notification){
+    private func backGroundReachabilityChanged(_ note: Notification) {
         self.user?.sendDataSaveInDefault()
     }
     
-    
-    func startApplicationDidEnterBackground(user:User){
+    func startApplicationDidEnterBackground(user:User) {
         self.user = user;
-        NotificationCenter.default.addObserver(self, selector: #selector(backGroundReachabilityChanged(_:)), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
-        do{
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(backGroundReachabilityChanged(_:)),
+            name: UIApplication.didEnterBackgroundNotification, object: nil
+        )
+        do {
             try reachability.startNotifier()
-        }catch{
+        } catch {
             // "could not start reachability notifier"
         }
     }
@@ -93,10 +82,15 @@ class ReachabilityManager {
     func startMonitoring(user:User) {
         self.user = user;
         self.stopMonitoring()
-        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(_:)), name: Notification.Name.reachabilityChanged, object: reachability)
-        do{
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reachabilityChanged(_:)),
+            name: Notification.Name.reachabilityChanged,
+            object: reachability
+        )
+        do {
             try reachability.startNotifier()
-        }catch{
+        } catch {
            //"could not start reachability notifier"
         }
     }
@@ -104,16 +98,18 @@ class ReachabilityManager {
     /// Stops monitoring the network availability status
     func stopMonitoring(){
         reachability.stopNotifier()
-        NotificationCenter.default.removeObserver(self,
-                                                  name: Notification.Name.reachabilityChanged,
-                                                  object: reachability)
+        NotificationCenter.default.removeObserver(
+            self,
+            name: Notification.Name.reachabilityChanged,
+            object: reachability
+        )
     }
     
-    func isCreateNotificationCenter()-> Bool{
-        return hasCreateNotificationCenter;
+    func isCreateNotificationCenter() -> Bool {
+        return hasCreateNotificationCenter
     }
     
-    func createNotificationCenter(create:Bool){
-        self.hasCreateNotificationCenter = create;
+    func createNotificationCenter(create:Bool) {
+        self.hasCreateNotificationCenter = create
     }
 }
