@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = "8.0"
   spec.swift_version = "4.2"
 
-  spec.source = { :git => "https://github.com/Navegg/navegg-ios.git", :tag => s.version.to_s }
+  spec.source = { :git => "https://github.com/Navegg/navegg-ios.git", :tag => spec.version.to_s }
 
   spec.source_files  = "SdkNaveggIOS", "SdkNaveggIOS/**/*.{h,m,swift}"
 
