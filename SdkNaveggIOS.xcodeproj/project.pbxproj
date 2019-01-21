@@ -77,6 +77,7 @@
 		37C8F8E82007DFA700E8C154 /* package.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = package.pb.swift; sourceTree = "<group>"; };
 		3F1347F4713BC6FC36F130A0 /* Pods_SdkNaveggIOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SdkNaveggIOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		513EFAB29955F7BAC9809B69 /* Pods-SdkNaveggIOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SdkNaveggIOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS.debug.xcconfig"; sourceTree = "<group>"; };
+		752835A621F10C2300FD2420 /* Pods */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Pods; sourceTree = "<group>"; };
 		816F3D43139013EED57353BD /* Pods_SdkNaveggIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SdkNaveggIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A50BDC8A18EB1BE44175923B /* Pods-SdkNaveggIOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SdkNaveggIOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +108,7 @@
 		373099BB200791BE009655B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				752835A621F10C2300FD2420 /* Pods */,
 				376032FA216C0102006FCFD3 /* SwiftProtobuf.framework */,
 				376032F8216C009E006FCFD3 /* protoc-gen-swift */,
 				376032F6216C0020006FCFD3 /* Frameworks */,
