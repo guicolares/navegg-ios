@@ -155,7 +155,11 @@ class Util {
     }
     
     public func getUserAgent() -> String {
-        return (UIWebView().stringByEvaluatingJavaScript(from: "navigator.userAgent"))!
+        var userAgent = ""
+        DispatchQueue.main.async {
+            userAgent = (UIWebView().stringByEvaluatingJavaScript(from: "navigator.userAgent"))!
+        }
+        return userAgent
     }
     
     public func getLanguageApp() -> String {
