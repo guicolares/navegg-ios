@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   
   spec.name         = "NaveggSdkIOS"
-  spec.version      = "1.1.3"
+  spec.version      = "1.1.4"
   spec.summary      = "Library used in the tracker users."
   spec.description  = "Library to tracker, custom, segments and onBoarding" 
 
