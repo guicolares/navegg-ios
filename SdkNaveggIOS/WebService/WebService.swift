@@ -62,14 +62,20 @@ class WebService {
                 case .success:
                     do {
                         var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
-                        let userId = jsonData!["nvgid"] as! String
-                        let usr = user
-                        usr.__set_user_id(userID: userId)
-                        self.runningCreateUser = false
-                        usr.setToDataMobileInfo(sendMobileinfo: true);
-                        usr.sendDataMobileInfo()
-                        self.getSegments(user: usr)
-
+                        if let userIdData = jsonData!["nvgid"] {
+                            let userId = userIdData as! String
+                            let usr = user
+                            usr.__set_user_id(userID: userId)
+                            self.runningCreateUser = false
+                            usr.setToDataMobileInfo(sendMobileinfo: true);
+                            usr.sendDataMobileInfo()
+                            self.getSegments(user: usr)
+                            
+                        } else {
+                            self.runningCreateUser = false
+                            print("catch createUser WebService...")
+                            Thread.callStackSymbols.forEach{print($0)}
+                        }
                     } catch {
                         self.runningCreateUser = false
                         print("catch createUser WebService...")
@@ -102,14 +108,18 @@ class WebService {
                 case .success:
                     do {
                         var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
-                        let status = jsonData!["status"] as! Bool
-                        if status {
-                            usr.setToDataMobileInfo(sendMobileinfo: true)
-                        } else {
-                            // status false
+                        
+                        if let statusData = jsonData!["status"] {
+                            let status = statusData as! Bool
+                            if status {
+                                usr.setToDataMobileInfo(sendMobileinfo: true)
+                            } else {
+                                // status false
+                                usr.setToDataMobileInfo(sendMobileinfo: false)
+                            }
                         }
                     } catch {
-                        
+                        usr.setToDataMobileInfo(sendMobileinfo: false)
                     }
                    break
                 case .failure:
