@@ -154,12 +154,6 @@ class Util {
         return versionCodeLib
     }
     
-    public func getUserAgent() -> String {
-        var userAgent = ""
-        userAgent = (UIWebView().stringByEvaluatingJavaScript(from: "navigator.userAgent"))!
-        return userAgent
-    }
-    
     public func getLanguageApp() -> String {
         return Locale.preferredLanguages[0]
     }

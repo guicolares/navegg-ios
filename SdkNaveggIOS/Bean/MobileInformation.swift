@@ -23,7 +23,6 @@ struct MobileInformation {
     var versionCode : Int
     var versionOS : Int
     var IOSFingerprint : String
-    var userAgent : String
     var linkPlayStore : String
     var typeCategory : String
     var imei : String

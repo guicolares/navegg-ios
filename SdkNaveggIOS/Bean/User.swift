@@ -121,7 +121,6 @@ class User {
         mobInfo.versionCode = Int32(Int(util.getVersionCodeLib())!)
         mobInfo.versionOs = util.getIOSVersionOS()
         mobInfo.androidFingerPrint = util.getDeviceId()
-        //mobInfo.userAgent = util.getUserAgent()
         mobInfo.userAgent = "IOS"
         mobInfo.linkPlayStore = util.getLinkAppStore(appId: (self.defaults.integer(forKey: "NVGSDK_IDAPPSTORE")))
         mobInfo.imei = util.getDeviceId() // IOS não permite pegar o imei, e recomenda usar o Device ID como IMEI
