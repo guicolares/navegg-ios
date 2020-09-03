@@ -24,6 +24,8 @@ class LocationPosition:NSObject,CLLocationManagerDelegate {
             case .notDetermined, .restricted, .denied: break
             case .authorizedAlways, .authorizedWhenInUse:
                 locationManager.startUpdatingLocation()
+            @unknown default:
+                fatalError()
             }
         } else {
 

@@ -116,16 +116,16 @@ class Util {
         let version = UIDevice.current.systemVersion
         var index8:Character=" "
         var v:String = ""
-        let index1 = version.index(before:version.index(version.startIndex, offsetBy: version.distance(from: version.startIndex  , to: version.index(of: ".")!)))
+        let index1 = version.index(before:version.index(version.startIndex, offsetBy: version.distance(from: version.startIndex  , to: version.firstIndex(of: ".")!)))
         let index2 = version[...index1]
-        let index3 = version.index(after:version.index(version.startIndex, offsetBy: version.distance(from: version.startIndex  , to: version.index(of: ".")!)))
+        let index3 = version.index(after:version.index(version.startIndex, offsetBy: version.distance(from: version.startIndex  , to: version.firstIndex(of: ".")!)))
         let index4 = version[index3...]
         
         v = "\(index2)\(index4)"
         if(version.count > 4){
-            let index5 = index4.index(before:index4.index(index4.startIndex, offsetBy: index4.distance(from: index4.startIndex  , to: index4.index(of: ".")!)))
+            let index5 = index4.index(before:index4.index(index4.startIndex, offsetBy: index4.distance(from: index4.startIndex  , to: index4.firstIndex(of: ".")!)))
             let index6 = version[index5]
-            let index7 = index4.index(after:index4.index(index4.startIndex, offsetBy: index4.distance(from: index4.startIndex  , to: index4.index(of: ".")!)))
+            let index7 = index4.index(after:index4.index(index4.startIndex, offsetBy: index4.distance(from: index4.startIndex  , to: index4.firstIndex(of: ".")!)))
             index8 = version[index7]
             v = "\(index2)\(index6)\(index8)"
         }

@@ -202,7 +202,7 @@ class User {
     }
     
     func removeCustom(id_custom:Int) {
-        if let index = self.listCustom.index(of: id_custom) {
+        if let index = self.listCustom.firstIndex(of: id_custom) {
             self.listCustom.remove(at: index)
         }
         if self.listCustom.count > 0 {

@@ -27,7 +27,7 @@ class WebService {
     }
     
     func ENDPOINTS(url : String) -> String {
-        var URL : [String:String] = ["app":"app","request":"cdn","onboarding":"cd"]
+        let URL : [String:String] = ["app":"app","request":"cdn","onboarding":"cd"]
         return URL[url]!
     }
     
@@ -61,7 +61,7 @@ class WebService {
                 switch (response.result) {
                 case .success:
                     do {
-                        var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
+                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
                         if let userIdData = jsonData!["nvgid"] {
                             let userId = userIdData as! String
                             let usr = user
@@ -107,7 +107,7 @@ class WebService {
                 switch (response.result) {
                 case .success:
                     do {
-                        var jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
+                        let jsonData = try JSONSerialization.jsonObject(with: response.data!, options: .allowFragments) as? [String:Any]
                         
                         if let statusData = jsonData!["status"] {
                             let status = statusData as! Bool
