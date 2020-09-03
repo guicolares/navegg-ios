@@ -38,7 +38,7 @@
 		37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBA20078E1600331A97 /* NaveggApi.swift */; };
 		37C10DBD20078E5C00331A97 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBC20078E5C00331A97 /* Util.swift */; };
 		37C8F8E92007DFA700E8C154 /* package.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8F8E82007DFA700E8C154 /* package.pb.swift */; };
-		6A88BD3B7B35CB2DFBFB340F /* Pods_SdkNaveggIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 816F3D43139013EED57353BD /* Pods_SdkNaveggIOS.framework */; };
+		93E99B668B8725B77F18CE97 /* libPods-SdkNaveggIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F7D448E8E00E514AB78A86 /* libPods-SdkNaveggIOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,8 +78,8 @@
 		3F1347F4713BC6FC36F130A0 /* Pods_SdkNaveggIOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SdkNaveggIOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		513EFAB29955F7BAC9809B69 /* Pods-SdkNaveggIOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SdkNaveggIOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS.debug.xcconfig"; sourceTree = "<group>"; };
 		752835A621F10C2300FD2420 /* Pods */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Pods; sourceTree = "<group>"; };
-		816F3D43139013EED57353BD /* Pods_SdkNaveggIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SdkNaveggIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A50BDC8A18EB1BE44175923B /* Pods-SdkNaveggIOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SdkNaveggIOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS.release.xcconfig"; sourceTree = "<group>"; };
+		B2F7D448E8E00E514AB78A86 /* libPods-SdkNaveggIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SdkNaveggIOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +90,7 @@
 				376032FB216C0102006FCFD3 /* SwiftProtobuf.framework in Frameworks */,
 				37BB5C61201B5F5F00069A98 /* Alamofire.framework in Frameworks */,
 				37BB5C62201B5F5F00069A98 /* Reachability.framework in Frameworks */,
-				6A88BD3B7B35CB2DFBFB340F /* Pods_SdkNaveggIOS.framework in Frameworks */,
+				93E99B668B8725B77F18CE97 /* libPods-SdkNaveggIOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,8 +115,8 @@
 				37BB5C5E201B5F5F00069A98 /* Alamofire.framework */,
 				37BB5C5F201B5F5F00069A98 /* Reachability.framework */,
 				37BB5C60201B5F5F00069A98 /* SwiftProtobuf.framework */,
-				816F3D43139013EED57353BD /* Pods_SdkNaveggIOS.framework */,
 				3F1347F4713BC6FC36F130A0 /* Pods_SdkNaveggIOSTests.framework */,
+				B2F7D448E8E00E514AB78A86 /* libPods-SdkNaveggIOS.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -550,7 +550,7 @@
 				);
 				INFOPLIST_FILE = SdkNaveggIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -585,7 +585,7 @@
 				);
 				INFOPLIST_FILE = SdkNaveggIOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

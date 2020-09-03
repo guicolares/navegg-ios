@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 class WebService {
-    let headers: [String:String] = [
+    let headers: HTTPHeaders = [
         "User-Agent":"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
         "content-type":"application/octet-stream"]
     let util = Util()
@@ -18,12 +18,12 @@ class WebService {
         .endLineWithLineFeed,
         .endLineWithCarriageReturn
     ]
-    var sessionConfig:SessionManager
+    var sessionConfig:Session
     let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
     var runningCreateUser:Bool!
     
     init () {
-        self.sessionConfig = Alamofire.SessionManager(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
+        self.sessionConfig = Alamofire.Session.init(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
     }
     
     func ENDPOINTS(url : String) -> String {
@@ -206,7 +206,7 @@ class WebService {
                 }
             }
             
-            Alamofire.request(self.getEndPoint(endPoint: "app", param: "app"),
+            AF.request(self.getEndPoint(endPoint: "app", param: "app"),
               parameters: parameters,
               headers: self.headers).responseJSON {
                 response in

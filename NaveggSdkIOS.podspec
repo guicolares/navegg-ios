@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   
   spec.name         = "NaveggSdkIOS"
-  spec.version      = "1.1.5"
+  spec.version      = "1.1.6"
   spec.summary      = "Library used in the tracker users."
   spec.description  = "Library to tracker, custom, segments and onBoarding" 
 
@@ -13,8 +13,8 @@ Pod::Spec.new do |spec|
 
   spec.module_name = "SdkNaveggIOS"
 
-  spec.ios.deployment_target = "8.0"
-  spec.swift_version = "4.2"
+  spec.ios.deployment_target = "13.0"
+  spec.swift_version = "5.0"
 
   spec.source = { :git => "https://github.com/Navegg/navegg-ios.git", :tag => spec.version.to_s }
 
@@ -22,8 +22,8 @@ Pod::Spec.new do |spec|
 
   spec.requires_arc = true
   
-  spec.dependency 'Alamofire', '~> 4.7.3'
-  spec.dependency 'SwiftProtobuf', '~> 1.2.0'
-  spec.dependency 'ReachabilitySwift', '~> 4.3.0'
+  spec.dependency 'Alamofire', '~> 5.2.2'
+  spec.dependency 'SwiftProtobuf', '~> 1.12.0'
+  spec.dependency 'ReachabilitySwift', '~> 5.0.0'
 
 end

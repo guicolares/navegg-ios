@@ -18,7 +18,7 @@ class ReachabilityManager {
     var defaults:UserDefaults?
     
     // 5. Reachability instance for Network status monitoring
-    let reachability = Reachability()!
+    let reachability = try! Reachability()
     
     public func getTypeConnection()->String{
         var type : String = ""
@@ -28,6 +28,8 @@ class ReachabilityManager {
         case .cellular:
             type = "4G"
         case .none:
+            type = "Sem Internet"
+        case .unavailable:
             type = "Sem Internet"
         }
         
