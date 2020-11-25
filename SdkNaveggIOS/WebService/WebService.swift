@@ -18,12 +18,12 @@ class WebService {
         .endLineWithLineFeed,
         .endLineWithCarriageReturn
     ]
-    var sessionConfig:Session
+    var sessionConfig:SessionManager
     let defineParams:[String] = ["prtusride","prtusridc","prtusridr","prtusridf", "prtusridt"]
     var runningCreateUser:Bool!
     
     init () {
-        self.sessionConfig = Alamofire.Session.init(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
+        self.sessionConfig = Alamofire.SessionManager(configuration: URLSessionConfiguration.background(withIdentifier: "com.navegg.SdkNaveggIOS"))
     }
     
     func ENDPOINTS(url : String) -> String {
@@ -206,7 +206,7 @@ class WebService {
                 }
             }
             
-            AF.request(self.getEndPoint(endPoint: "app", param: "app"),
+            Alamofire.request(self.getEndPoint(endPoint: "app", param: "app"),
               parameters: parameters,
               headers: self.headers).responseJSON {
                 response in
