@@ -22,7 +22,7 @@ Pod::Spec.new do |spec|
 
   spec.requires_arc = true
   
-  spec.dependency 'Alamofire', '~> 5.2.2'
+  spec.dependency 'Alamofire', '~> 4.9.0'
   spec.dependency 'SwiftProtobuf', '~> 1.12.0'
   spec.dependency 'ReachabilitySwift', '~> 5.0.0'
 

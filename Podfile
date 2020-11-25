@@ -8,7 +8,7 @@ target 'SdkNaveggIOS' do
   # Pods for SdkNaveggIOS
     pod 'ReachabilitySwift', '~> 5.0.0'
     pod 'SwiftProtobuf', '~> 1.12.0'
-    pod 'Alamofire', '~> 5.2.2'
+    pod 'Alamofire', '~> 4.9.0'
 
 
     # target 'SdkNaveggIOSTests' do
