@@ -81,17 +81,12 @@ class Util {
     }
     
     func getLinkAppStore(appId:Int) -> String {
-        return "http://itunes.apple.com/\(getCountryApp().lowercased())/app/\(getNameApp().lowercased())/id\(appId)?mt=8"
+        return "http://itunes.apple.com/app/\(getNameApp().lowercased())/id\(appId)?mt=8"
     }
     
     public func getNameApp() -> String {
         return Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
     }
-    
-    private func getCountryApp() -> String {
-        return ((Locale.current as NSLocale).object(forKey: .countryCode) as? String)!
-    }
-    
     
     public func getTitleView(navigationItem : AnyObject) -> String {
         var title : String
