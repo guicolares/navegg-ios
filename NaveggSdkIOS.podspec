@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   
   spec.name         = "NaveggSdkIOS"
-  spec.version      = "1.1.9"
+  spec.version      = "1.1.11"
   spec.summary      = "Library used in the tracker users."
   spec.description  = "Library to tracker, custom, segments and onBoarding" 
 
@@ -22,7 +22,7 @@ Pod::Spec.new do |spec|
 
   spec.requires_arc = true
   
-  spec.dependency 'Alamofire', '~> 4.9.0'
+  spec.dependency 'Alamofire', '~> 5.0.0'
   spec.dependency 'SwiftProtobuf', '~> 1.12.0'
   spec.dependency 'ReachabilitySwift', '~> 5.0.0'
 

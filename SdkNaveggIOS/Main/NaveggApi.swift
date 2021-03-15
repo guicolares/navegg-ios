@@ -22,8 +22,7 @@ public class NaveggApi:NSObject {
         self.defaults.set(idAppStore, forKey: "NVGSDK_IDAPPSTORE")
         self.user = User(accountId: accountId, context: context)
         self.appDelegate = context
-        LocationPosition.sharedLocation.determineMyCurrentLocation()
-        
+
         if self.user.getUserId() == "0" {
             self.user.createUserId()
         }
@@ -34,28 +33,11 @@ public class NaveggApi:NSObject {
     }
 
     func registerReceiverAndAccountSdk(cod:Int) {
-        
-        if !ReachabilityManager.shared.isCreateNotificationCenter() {
-            ReachabilityManager.shared.createNotificationCenter(create: true)
-            ReachabilityManager.shared.startMonitoring(user: self.user)
-            ReachabilityManager.shared.startApplicationDidEnterBackground(user: self.user)
-        }
-        
         var accounts = defaults.array(forKey: "accounts")?.count == 0 ?  [Int]() : defaults.array(forKey: "accounts") as? [Int] ?? [Int]()
         if accounts.contains(cod) == false {
             accounts.append(cod)
             defaults.set(accounts, forKey: "accounts")
         }
-    }
-    
-    public func setTrackPage(screen:String) {
-        user.makeAPageView(screen: screen)
-        self.user.sendDataTrack()
-    }
-    
-    public func setCustom(id_custom:Int) {
-        self.user.setCustom(id_custom: id_custom)
-        self.user.sendCustomList()
     }
     
     public func getSegments(segments:String) -> String {
@@ -70,13 +52,5 @@ public class NaveggApi:NSObject {
         if self.user.setOnBoarding(key: key, value: value) {
             self.user.sendOnBoarding()
         }
-    }
-    
-    public func getOnBoarding(key:String) -> String {
-        return self.user.getOnBoarding().getInfo(key: key)
-    }
-    
-    public func getUserId() -> String {
-        return self.user.getUserId()
     }
 }
