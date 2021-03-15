@@ -7,47 +7,10 @@
 //
 
 import Foundation
-import Reachability
-import UIKit
-import WebKit
 import Alamofire
 import AdSupport
 
 class Util {
-    
-    func getIpMobile() -> String {
-        var address : String!
-        
-        // Get list of all interfaces on the local machine:
-        var ifaddr : UnsafeMutablePointer<ifaddrs>?
-        guard getifaddrs(&ifaddr) == 0 else { return "" }
-        guard let firstAddr = ifaddr else { return "" }
-        
-        // For each interface ...
-        for ifptr in sequence(first: firstAddr, next: { $0.pointee.ifa_next }) {
-            let interface = ifptr.pointee
-            
-            // Check for IPv4 or IPv6 interface:
-            let addrFamily = interface.ifa_addr.pointee.sa_family
-            if addrFamily == UInt8(AF_INET) || addrFamily == UInt8(AF_INET6) {
-                
-                // Check interface name:
-                let name = String(cString: interface.ifa_name)
-                if  name == "en0" {
-                    
-                    // Convert interface address to a human readable string:
-                    var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-                    getnameinfo(interface.ifa_addr, socklen_t(interface.ifa_addr.pointee.sa_len),
-                                &hostname, socklen_t(hostname.count),
-                                nil, socklen_t(0), NI_NUMERICHOST)
-                    address = String(cString: hostname)
-                }
-            }
-        }
-        freeifaddrs(ifaddr)
-        
-        return address
-    }
     
     func getDeviceId() -> String {
         var strIDFA = "0"
@@ -88,17 +51,6 @@ class Util {
         return Bundle.main.infoDictionary![kCFBundleNameKey as String] as! String
     }
     
-    public func getTitleView(navigationItem : AnyObject) -> String {
-        var title : String
-
-        if navigationItem.title == "" {
-            title = "Sem titulo"
-        } else {
-            title = navigationItem.title
-        }
-        return title
-    }
-    
     public func getIOSModel() -> String {
         return UIDevice.init().localizedModel
     }
@@ -128,20 +80,6 @@ class Util {
         
     }
     
-    public func getVersionApp() -> String {
-        var versionApp = ""
-        versionApp = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-
-        return versionApp
-    }
-    
-    public func getVersionLib() -> String {
-        var versionLib = ""
-        versionLib = Bundle(for: NaveggApi.self).infoDictionary?["CFBundleShortVersionString"] as! String
-        
-        return versionLib
-    }
-    
     public func getVersionCodeLib() -> String {
         var versionCodeLib = ""
         versionCodeLib = Bundle(for: NaveggApi.self).infoDictionary?["CFBundleVersion"] as! String
@@ -164,36 +102,6 @@ class Util {
         let date = Date()
     
         return Int64(((date.timeIntervalSince1970) * 1000.0).rounded())
-    }
-    
-    func setDataTrack (user:User,pageView:[PageView]) -> Track {
-        
-        var trackProto = Track()
-        trackProto.acc = user.getAccountId()
-        trackProto.userID = user.getUserId()
-        trackProto.nameApp = getNameApp()
-        trackProto.deviceIp = getIpMobile()
-        trackProto.typeConnection = ReachabilityManager.shared.getTypeConnection()
-        trackProto.pageViews = pageView
-        
-        return trackProto
-    }
-    
-    func setListDataPageTrack(pageView : [PageViewer]) -> [PageView] {
-        
-        var listPageView = [PageView]()
-        
-        for pageView in pageView{
-            
-            var pageViewProto = PageView()
-            pageViewProto.activity = pageView.view
-            pageViewProto.dateTime = UInt64(pageView.dateTime)
-            pageViewProto.titlePage = pageView.titlePage
-            pageViewProto.callPage = pageView.callPage
-            
-            listPageView.append(pageViewProto)
-        }
-        return listPageView
     }
     
     

@@ -23,22 +23,12 @@
 /* Begin PBXBuildFile section */
 		370A2B502010FCF20097033E /* OnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370A2B4F2010FCF20097033E /* OnBoarding.swift */; };
 		373099CD20079280009655B8 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CC20079280009655B8 /* WebService.swift */; };
-		373099D32007928C009655B8 /* MobileInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CE2007928B009655B8 /* MobileInformation.swift */; };
-		373099D42007928C009655B8 /* PageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099CF2007928B009655B8 /* PageViewer.swift */; };
-		373099D52007928C009655B8 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D02007928B009655B8 /* Tracker.swift */; };
 		373099D62007928C009655B8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373099D12007928B009655B8 /* User.swift */; };
-		376032FB216C0102006FCFD3 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 376032FA216C0102006FCFD3 /* SwiftProtobuf.framework */; };
-		376D24882015FFA4007D3971 /* ReachabilityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376D24872015FFA4007D3971 /* ReachabilityManager.swift */; };
-		377E2C62201896BF00217E71 /* LocationPostion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377E2C61201896BF00217E71 /* LocationPostion.swift */; };
-		37BB5C61201B5F5F00069A98 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB5C5E201B5F5F00069A98 /* Alamofire.framework */; };
-		37BB5C62201B5F5F00069A98 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37BB5C5F201B5F5F00069A98 /* Reachability.framework */; };
 		37C10DA920078DA400331A97 /* SdkNaveggIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C10D9F20078DA400331A97 /* SdkNaveggIOS.framework */; };
 		37C10DAE20078DA400331A97 /* SdkNaveggIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DAD20078DA400331A97 /* SdkNaveggIOSTests.swift */; };
 		37C10DB020078DA400331A97 /* SdkNaveggIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C10DA220078DA400331A97 /* SdkNaveggIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBA20078E1600331A97 /* NaveggApi.swift */; };
 		37C10DBD20078E5C00331A97 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBC20078E5C00331A97 /* Util.swift */; };
-		37C8F8E92007DFA700E8C154 /* package.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C8F8E82007DFA700E8C154 /* package.pb.swift */; };
-		93E99B668B8725B77F18CE97 /* libPods-SdkNaveggIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F7D448E8E00E514AB78A86 /* libPods-SdkNaveggIOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,15 +44,10 @@
 /* Begin PBXFileReference section */
 		370A2B4F2010FCF20097033E /* OnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoarding.swift; sourceTree = "<group>"; };
 		373099CC20079280009655B8 /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
-		373099CE2007928B009655B8 /* MobileInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileInformation.swift; sourceTree = "<group>"; };
-		373099CF2007928B009655B8 /* PageViewer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewer.swift; sourceTree = "<group>"; };
-		373099D02007928B009655B8 /* Tracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		373099D12007928B009655B8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		376032F6216C0020006FCFD3 /* Frameworks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Frameworks; sourceTree = "<group>"; };
 		376032F8216C009E006FCFD3 /* protoc-gen-swift */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "protoc-gen-swift"; path = "Frameworks/protoc-gen-swift"; sourceTree = "<group>"; };
 		376032FA216C0102006FCFD3 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftProtobuf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		376D24872015FFA4007D3971 /* ReachabilityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityManager.swift; sourceTree = "<group>"; };
-		377E2C61201896BF00217E71 /* LocationPostion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPostion.swift; sourceTree = "<group>"; };
 		37BB5C5E201B5F5F00069A98 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Frameworks/Alamofire.framework; sourceTree = "<group>"; };
 		37BB5C5F201B5F5F00069A98 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Frameworks/Reachability.framework; sourceTree = "<group>"; };
 		37BB5C60201B5F5F00069A98 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Frameworks/SwiftProtobuf.framework; sourceTree = "<group>"; };
@@ -74,7 +59,6 @@
 		37C10DAF20078DA400331A97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37C10DBA20078E1600331A97 /* NaveggApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaveggApi.swift; sourceTree = "<group>"; };
 		37C10DBC20078E5C00331A97 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		37C8F8E82007DFA700E8C154 /* package.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = package.pb.swift; sourceTree = "<group>"; };
 		3F1347F4713BC6FC36F130A0 /* Pods_SdkNaveggIOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SdkNaveggIOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		513EFAB29955F7BAC9809B69 /* Pods-SdkNaveggIOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SdkNaveggIOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS.debug.xcconfig"; sourceTree = "<group>"; };
 		752835A621F10C2300FD2420 /* Pods */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Pods; sourceTree = "<group>"; };
@@ -87,10 +71,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				376032FB216C0102006FCFD3 /* SwiftProtobuf.framework in Frameworks */,
-				37BB5C61201B5F5F00069A98 /* Alamofire.framework in Frameworks */,
-				37BB5C62201B5F5F00069A98 /* Reachability.framework in Frameworks */,
-				93E99B668B8725B77F18CE97 /* libPods-SdkNaveggIOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,13 +104,8 @@
 		373099C0200791EF009655B8 /* Bean */ = {
 			isa = PBXGroup;
 			children = (
-				373099CE2007928B009655B8 /* MobileInformation.swift */,
-				373099CF2007928B009655B8 /* PageViewer.swift */,
-				37C8F8E82007DFA700E8C154 /* package.pb.swift */,
-				373099D02007928B009655B8 /* Tracker.swift */,
 				373099D12007928B009655B8 /* User.swift */,
 				370A2B4F2010FCF20097033E /* OnBoarding.swift */,
-				376D24872015FFA4007D3971 /* ReachabilityManager.swift */,
 			);
 			path = Bean;
 			sourceTree = "<group>";
@@ -190,7 +165,6 @@
 			children = (
 				37C10DBA20078E1600331A97 /* NaveggApi.swift */,
 				37C10DBC20078E5C00331A97 /* Util.swift */,
-				377E2C61201896BF00217E71 /* LocationPostion.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -356,17 +330,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				377E2C62201896BF00217E71 /* LocationPostion.swift in Sources */,
-				373099D52007928C009655B8 /* Tracker.swift in Sources */,
-				373099D32007928C009655B8 /* MobileInformation.swift in Sources */,
 				373099CD20079280009655B8 /* WebService.swift in Sources */,
 				37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */,
-				376D24882015FFA4007D3971 /* ReachabilityManager.swift in Sources */,
 				370A2B502010FCF20097033E /* OnBoarding.swift in Sources */,
 				37C10DBD20078E5C00331A97 /* Util.swift in Sources */,
-				373099D42007928C009655B8 /* PageViewer.swift in Sources */,
 				373099D62007928C009655B8 /* User.swift in Sources */,
-				37C8F8E92007DFA700E8C154 /* package.pb.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
