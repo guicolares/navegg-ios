@@ -14,8 +14,8 @@ class Util {
     
     func getDeviceId() -> String {
         var strIDFA = "0"
-        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
-            strIDFA = ASIdentifierManager.shared().advertisingIdentifier.uuidString
+        if let uuid = UIDevice.current.identifierForVendor?.uuidString {
+            strIDFA = uuid
         }
         return strIDFA
     }
