@@ -29,6 +29,7 @@
 		37C10DB020078DA400331A97 /* SdkNaveggIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C10DA220078DA400331A97 /* SdkNaveggIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37C10DBB20078E1600331A97 /* NaveggApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBA20078E1600331A97 /* NaveggApi.swift */; };
 		37C10DBD20078E5C00331A97 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C10DBC20078E5C00331A97 /* Util.swift */; };
+		89271FBD0DDF38017D13FCB9 /* libPods-SdkNaveggIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2F7D448E8E00E514AB78A86 /* libPods-SdkNaveggIOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89271FBD0DDF38017D13FCB9 /* libPods-SdkNaveggIOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +203,7 @@
 				37C10D9B20078DA400331A97 /* Frameworks */,
 				37C10D9C20078DA400331A97 /* Headers */,
 				37C10D9D20078DA400331A97 /* Resources */,
+				F4372C96EF768DE0B659EA36 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -321,6 +324,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F4372C96EF768DE0B659EA36 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SdkNaveggIOS/Pods-SdkNaveggIOS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

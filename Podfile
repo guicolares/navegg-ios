@@ -6,7 +6,7 @@ target 'SdkNaveggIOS' do
   #use_frameworks!
 
   # Pods for SdkNaveggIOS
-    pod 'ReachabilitySwift', '~> 5.0.0'
+    pod 'ReachabilitySwift', '~> 5.2.0'
     pod 'Alamofire', '~> 5.0.0'
 
 

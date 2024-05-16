@@ -24,6 +24,6 @@ Pod::Spec.new do |spec|
   
   spec.dependency 'Alamofire', '~> 5.0.0'
   spec.dependency 'SwiftProtobuf', '~> 1.12.0'
-  spec.dependency 'ReachabilitySwift', '~> 5.0.0'
+  spec.dependency 'ReachabilitySwift', '~> 5.2.0'
 
 end
